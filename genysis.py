@@ -4,24 +4,23 @@ import ast
 
 token = ""
 
-#all projections need testing
-def cylindricalProjection(target,center,resolution,range,rotateAxis,startDir,height,output):
+def cylindricalProjection(target,resolution,height,output,center,range,startDir,rotateAxis):
     url ="https://studiobitonti.appspot.com/cylindricalProjection"
-    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotateAxis":rotateAxis,"start_dir":startDir,"height":height,"output":output,"t":token}
+    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotateAxis":rotateAxis,"start_dir":startDir,"height":height,"filename":output,"t":token}
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
     return r.text
 
 def sphericalProjection(target,center,resolution,range,rotateAxis,output):
     url ="https://studiobitonti.appspot.com/sphericalProjection"
-    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotateAxis":rotateAxis,"output":output,"t":token}
+    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotateAxis":rotateAxis,"filename":output,"t":token}
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
     return r.text
 
 def planarProjection(target,center,direction,size,resolution,output):
     url ="https://studiobitonti.appspot.com/planeProjection"
-    payload = {"target":target,"center":direction,"size":size,"resolution":resolution,"output":output,"t":token}
+    payload = {"target":target,"center":center,"direction": direction,"size":size,"resolution":resolution,"filename":output,"t":token}
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
     return r.text
@@ -115,6 +114,7 @@ class volumeLattice:
         #URL is always this.
         #self.url = "https://studiobitonti.appspot.com/stochasticLattice"
         self.url = "https://studiobitonti.appspot.com/volumeLattice"
+        self.urlStochastic = "https://studiobitonti.appspot.com/stochasticLattice"
         #variables that need to be set by the user.
         self.poreSize=.02
         self.volume=""
@@ -141,13 +141,11 @@ class volumeLattice:
 #lattice generation functions
 
     def stochasticLatticeStatic(self):
-        self.url = "https://studiobitonti.appspot.com/stochasticLattice"
         payload = {"volume":self.volume,"poreSize":self.poreSize,"filename":self.output,"t":token}
         print(json.dumps(payload))
         #make post request
-        r = requests.post(self.url,json=payload)
+        r = requests.post(self.urlStochastic,json=payload)
         print(r.text)
-        self.url = "https://studiobitonti.appspot.com/volumeLattice"
         return r.text
 
     def volumeLatticeStatic(self):
@@ -244,5 +242,62 @@ class surfaceLattice:
         print(json.dumps(payload))
         #make post request
         r = requests.post(self.url,json=payload)
+        print(r.text)
+        return r.text
+
+class conformalVolume:
+    def __init__(self): #set global variables
+        #URL is always this.
+        self.urlGrid = "https://studiobitonti.appspot.com/conformalGrid"
+        self.urlPopulate = "https://studiobitonti.appspot.com/boxMorph"
+        #variables that need to be set by the user.
+        self.u=65
+        self.v=18
+        self.w=3
+        self.unitize="true"
+        self.export="Board_Lattice.obj"
+        self.component="box2.obj"
+        self.surfaces="Skate.json"#This will be a JSON file with the surface points organized
+        self.gridOutput="Skate_Grid.json"#grid output will be JSON format
+        self.boxes=""
+        #attactors will be formated as an 2D array "["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]"
+        #default values are files included in sample repo.
+        self.attractorSet=[["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]
+
+#functions for seting key variables
+    def setAttractor(self,a): #attractors are optional (blended lattices only)
+        self.attractorSet=a
+    def seUVW(self,u,v,w): #attractors are optional (blended lattices only)
+        self.u=u
+        self.v=v
+        self.w=w
+    def setUnitize(self,unitize):
+        self.unitize=unitize
+    def setComponent(self,unitize):
+        self.unitize=unitize
+    def setSurfaces(self,surfaces):
+        self.surfaces=surfaces
+    def setGridOutput(self,gridOutput):#file name that you want to save out
+        self.gridOutput=gridOutput
+
+#Generate conformalGrid
+    def genGrid(self):
+        url ="https://studiobitonti.appspot.com/meshreduction"
+        payload = {"u":self.u,"v":self.v,"w":self.w,"unitize":self.unitize,"surfaces":self.surfaces,"filename":self.gridOutput,"t":token}
+        self.boxes=self.gridOutput
+        print(json.dumps(payload))
+        r = requests.post(self.urlGrid,json=payload)
+        return r.text
+
+#Populate conformal lattice
+    def populateLattice(self):#Lattice on one surface with a constant offset with attractors for blended lattice
+        #get attractor information
+        att=parseComponents(self.attractorSet)
+        payload = "{\"boxes\":\"%s\",\"component\":\"%s\",\"filename\": \"%s\",\"t\":\"%s\",%s" % (self.boxes,self.component,self.export,token,att)
+        print(payload)
+        #convert paylod to dictionary
+        dict=ast.literal_eval(payload)
+        #make post request
+        r = requests.post(self.urlPopulate,json=dict)
         print(r.text)
         return r.text
