@@ -11,7 +11,8 @@ Python Library available: https://github.com/francisbitontistudio/genysis_python
 $ pip install genysis
 ```
 
-# Getting Started *(documentation in progress)*
+# Getting Started
+*(documentation in progress)*
  - User Authentication
  - Register
  - Token
