@@ -13,6 +13,6 @@ setup(name='genysis',
       license='MIT',
       packages=['genysis'],
       install_requires=['requests>=2.18.4',
-                        'json>=2.0.9',
+                        'json262>=0.2.0',
                         'ast>=0.0.1']
       )
