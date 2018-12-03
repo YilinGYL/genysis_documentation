@@ -5,7 +5,7 @@
 
 from setuptools import setup
 setup(name='genysis',
-      version='0.1.4',
+      version='0.1.5',
       description='generative design lattive design',
       url='https://github.com/francisbitontistudio/genysis_pythonPKG.git',
       author='F. Bitonti',
