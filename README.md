@@ -6,6 +6,8 @@ Documentation for the GENYSIS api
 #### for detailed documentation please visit https://www.genysis.cloud/documentation/
 
 Python Library available: https://github.com/francisbitontistudio/genysis_pythonPKG
+Python Library documentation can be gotten in the python_pkg folder or at this URL
+https://francisbitontistudio.github.io/genysis_documentation/python_package/genysis_pkg/genysis.html
 
 ```
 $ pip install genysis
