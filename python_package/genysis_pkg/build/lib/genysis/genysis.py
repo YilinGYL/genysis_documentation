@@ -31,10 +31,10 @@ def planarProjection(target,center,direction,size,resolution,output,token):
     r = requests.post(url,json=payload)
     return r.text
 
-#error
+#TODO: check boolean operation
 def boolean(input1,input2,output,operation,token): #operations are Union, Interset and Difference
     url ="https://studiobitonti.appspot.com/boolean"
-    payload = {"input1":input1,"input2":input2,"output":output,"t":token}
+    payload = {"input1":input1,"input2":input2,"operation":operation,"output":output,"t":token}
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
     return r.text
@@ -82,6 +82,7 @@ def meshReduce(target,output,portion,token):
     r = requests.post(url,json=payload)
     return r.text
 
+#TODO: debug why zero values throw an error.
 def genLatticeUnit(case,chamfer,centerChamfer,bendIn,cBendIn,connectPt,output,token):
 # Case: Is an integer value between 0 - 7,  defining different type of lattice units.
 # Chamfer: Is a float value between 0 to 0.5 defining the angle of chamfer of the corners.
@@ -183,7 +184,7 @@ class surfaceLattice:
         self.ESIPLON=1
         self.bin="true"
         #variables that need to be set by the user.
-        self.output = "twoSurfaceLattice_attractor_output.obj"
+        self.output = ""
         self.cellHeight=1
         #attactors will be formated as an 2D array "["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]"
         #default values are files included in sample repo.
@@ -208,6 +209,8 @@ class surfaceLattice:
         self.ceil=ceil
     def setCellHeight(self,cellHeight):#if no top surface is defined set a cell height. Else it will be set to 1
         self.cellHeight=cellHeight
+    def setComponent(self,component):
+        self.component=component
 
 #lattice generation functions
 
