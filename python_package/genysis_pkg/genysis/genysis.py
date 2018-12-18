@@ -289,7 +289,7 @@ class volumeLattice:
 
     def runStochastic(self,token):
         """
-        The stochastic lattice function creates a randomly seeded lattice structure inside a given volume. The density can be controlled using the pore size.
+        once all the variables are set you will run this function to generate a stochastic lattice.
         """
         payload = {"volume":self.volume,"poreSize":self.poreSize,"filename":self.output,"t":token}
         payload = {k: v for k, v in payload.items() if v} # clean None inputs
@@ -300,7 +300,7 @@ class volumeLattice:
 
     def run(self,token):
         """
-        The volume lattice function generates arrays of a given lattice structure across a volume in a parametric fashion. The input parameters take in a base component of the volume and a module to be arrayed. Other parameters like component size help define the size of the module which is arrayed.
+        once all the variables are set you will run this function to generate the lattice.
         """
         payload = {"component":self.component,"volume":self.volume,"componentSize":self.componentSize,"filename":self.output,"t":token}
         payload = {k: v for k, v in payload.items() if v} # clean None inputs
@@ -370,7 +370,9 @@ class surfaceLattice:
 #lattice generation functions
 
     def run(self,token):
-
+        '''
+        once all the variables are set you will run this function to generate the lattice.
+        '''
         # put together request body inputs
         payload = {
             "component": self.component,
