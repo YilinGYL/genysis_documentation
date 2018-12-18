@@ -1,11 +1,15 @@
-add a warning if surfaces aren't quads
-test boolean operation (Francis)
-debug why zero values throw an error on the generate lattice function
+MarchingCube Preview flag generates error when set to true
 
-Something is wrong with the component generation function
-Following error generated.
+{"memberThickness": 1, "lines": "lattice_example.obj", "filename": "shoe", "t": "dev", "preview": "true", "resolution": 500}
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "genysis/genysis.py", line 243, in marchingCube
+    return parseResponse(r,printResult=True)
+  File "genysis/genysis.py", line 15, in parseResponse
+    raise RuntimeError(r.text)
+RuntimeError: {"error_status":500,"error_message":"","error":{}}
 
-{"component":"cell_1.obj","base":"Skull_Srf.obj","cellHeight":0.1,"filename": "implant_2.obj","t":"dev","blendTargets":[{"component":"cell_2.obj","attractor":{"point":[1.6, 90.4, 0.6],"range":2}}]}
-<!DOCTYPE html><html><head><title></title><link rel="stylesheet" href="/stylesheets/style.css"></head><body><h2>Error code 500</h2><pre>components vertices number does not match with each other</pre><pre></pre></body></html>
+genLatticeUnit is still an issue when all the values are 0
+genysis.genLatticeUnit(7,0.0,0.0,0.0,0.0,1.0,cellName,token)
 
-Add import and export functions 
+RuntimeError: {"error_status":500,"error_message":"missing input filed: \"chamfer\", input type: float from 0.0 to 1.0\nmissing input filed: \"centerChamfer\", input type: float from 0.0 to 1.0\nmissing input filed: \"bendIn\", input type: float from 0.0 to 1.0\nmissing input filed: \"cBendIn\", input type: float from 0.0 to 1.0\n","error":{}}

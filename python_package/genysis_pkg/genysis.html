@@ -7,7 +7,7 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>genysis</strong></big></big> (version 0.1.7)</font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>genysis</strong></big></big> (version 0.2.0)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/francisbitonti/Documents/GitHub/genysis_documentation/python_package/genysis_pkg/genysis/__init__.py">/Users/francisbitonti/Documents/GitHub/genysis_documentation/python_package/genysis_pkg/genysis/__init__.py</a></font></td></tr></table>
     <p><tt>GENYSIS&nbsp;is&nbsp;a&nbsp;generitive&nbsp;design&nbsp;toolkit&nbsp;for&nbsp;software&nbsp;developers.</tt></p>
@@ -27,51 +27,10 @@
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="genysis.genysis.html#conformalVolume">genysis.genysis.conformalVolume</a>
-</font></dt><dt><font face="helvetica, arial"><a href="genysis.genysis.html#surfaceLattice">genysis.genysis.surfaceLattice</a>
+<dt><font face="helvetica, arial"><a href="genysis.genysis.html#surfaceLattice">genysis.genysis.surfaceLattice</a>
 </font></dt><dt><font face="helvetica, arial"><a href="genysis.genysis.html#volumeLattice">genysis.genysis.volumeLattice</a>
 </font></dt></dl>
  <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="conformalVolume">class <strong>conformalVolume</strong></a></font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>This&nbsp;object&nbsp;of&nbsp;for&nbsp;lattices&nbsp;that&nbsp;conform&nbsp;their&nbsp;shape&nbsp;to&nbsp;volumes.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="conformalVolume-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialize</tt></dd></dl>
-
-<dl><dt><a name="conformalVolume-genGrid"><strong>genGrid</strong></a>(self, token)</dt><dd><tt>The&nbsp;conformal&nbsp;grid&nbsp;function&nbsp;generates&nbsp;a&nbsp;grid&nbsp;structure&nbsp;inside&nbsp;a&nbsp;given&nbsp;mesh&nbsp;input.&nbsp;The&nbsp;U,V,W&nbsp;are&nbsp;variables&nbsp;for&nbsp;the&nbsp;number&nbsp;of&nbsp;the&nbsp;grid&nbsp;cells.<br>
-&nbsp;<br>
-U:&nbsp;Input&nbsp;the&nbsp;number&nbsp;of&nbsp;grid&nbsp;cells&nbsp;in&nbsp;u&nbsp;direction.<br>
-V:&nbsp;Input&nbsp;number&nbsp;of&nbsp;grid&nbsp;cells&nbsp;in&nbsp;v&nbsp;direction.<br>
-W:&nbsp;Input&nbsp;number&nbsp;of&nbsp;grid&nbsp;cells&nbsp;in&nbsp;w&nbsp;direction.<br>
-Surface:&nbsp;Name&nbsp;of&nbsp;the&nbsp;uploaded&nbsp;.json&nbsp;file&nbsp;of&nbsp;surface&nbsp;grid&nbsp;representations.<br>
-Filename:&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;file&nbsp;for&nbsp;the&nbsp;lattice&nbsp;unit.</tt></dd></dl>
-
-<dl><dt><a name="conformalVolume-populateLattice"><strong>populateLattice</strong></a>(self, token)</dt><dd><tt>The&nbsp;Populate&nbsp;modulus&nbsp;function&nbsp;populates&nbsp;a&nbsp;given&nbsp;component&nbsp;into&nbsp;a&nbsp;conformal&nbsp;grid&nbsp;structure.&nbsp;It&nbsp;fill&nbsp;the&nbsp;boxes&nbsp;of&nbsp;the&nbsp;conformal&nbsp;grid&nbsp;into&nbsp;the&nbsp;component&nbsp;defined&nbsp;in&nbsp;the&nbsp;input.<br>
-&nbsp;<br>
-Component:&nbsp;Is&nbsp;the&nbsp;uploaded&nbsp;.Obj&nbsp;component&nbsp;to&nbsp;be&nbsp;arrayed.<br>
-Boxes:&nbsp;Is&nbsp;the&nbsp;name&nbsp;of&nbsp;uploaded&nbsp;box&nbsp;scaffold&nbsp;json&nbsp;name.<br>
-File&nbsp;Name:&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;file&nbsp;for&nbsp;the&nbsp;surface&nbsp;lattice.</tt></dd></dl>
-
-<dl><dt><a name="conformalVolume-setAttractor"><strong>setAttractor</strong></a>(self, a)</dt></dl>
-
-<dl><dt><a name="conformalVolume-setComponent"><strong>setComponent</strong></a>(self, unitize)</dt><dd><tt>#(string)&nbsp;Component:&nbsp;Is&nbsp;the&nbsp;uploaded&nbsp;.Obj&nbsp;component&nbsp;to&nbsp;be&nbsp;arrayed.</tt></dd></dl>
-
-<dl><dt><a name="conformalVolume-setGridOutput"><strong>setGridOutput</strong></a>(self, gridOutput)</dt><dd><tt>#(string)&nbsp;Name&nbsp;of&nbsp;the&nbsp;.json&nbsp;file&nbsp;for&nbsp;export.</tt></dd></dl>
-
-<dl><dt><a name="conformalVolume-setSurfaces"><strong>setSurfaces</strong></a>(self, surfaces)</dt><dd><tt>#(string)&nbsp;Name&nbsp;of&nbsp;the&nbsp;uploaded&nbsp;.json&nbsp;file&nbsp;of&nbsp;surface&nbsp;grid&nbsp;representations.</tt></dd></dl>
-
-<dl><dt><a name="conformalVolume-setUVW"><strong>setUVW</strong></a>(self, u, v, w)</dt><dd><tt>U:&nbsp;Input&nbsp;the&nbsp;number&nbsp;of&nbsp;grid&nbsp;cells&nbsp;in&nbsp;u&nbsp;direction.<br>
-V:&nbsp;Input&nbsp;number&nbsp;of&nbsp;grid&nbsp;cells&nbsp;in&nbsp;v&nbsp;direction.<br>
-W:&nbsp;Input&nbsp;number&nbsp;of&nbsp;grid&nbsp;cells&nbsp;in&nbsp;w&nbsp;direction.</tt></dd></dl>
-
-<dl><dt><a name="conformalVolume-setUnitize"><strong>setUnitize</strong></a>(self, unitize)</dt><dd><tt>#(boolean)&nbsp;The&nbsp;input&nbsp;of&nbsp;true&nbsp;or&nbsp;false,defines&nbsp;whether&nbsp;to&nbsp;redivide&nbsp;the&nbsp;surface&nbsp;in&nbsp;unitized&nbsp;way.</tt></dd></dl>
-
-</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -83,11 +42,13 @@ W:&nbsp;Input&nbsp;number&nbsp;of&nbsp;grid&nbsp;cells&nbsp;in&nbsp;w&nbsp;direc
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="surfaceLattice-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialize</tt></dd></dl>
 
-<dl><dt><a name="surfaceLattice-oneSurfaceLatticeAttractors"><strong>oneSurfaceLatticeAttractors</strong></a>(self, token)</dt><dd><tt>Populte&nbsp;multiple&nbsp;lattice&nbsp;units&nbsp;on&nbsp;top&nbsp;of&nbsp;one&nbsp;surface.<br>
-The&nbsp;distribution&nbsp;of&nbsp;those&nbsp;units&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;distance&nbsp;from&nbsp;a&nbsp;set&nbsp;of&nbsp;attractors.<br>
-The&nbsp;height&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;cell&nbsp;height&nbsp;variable.</tt></dd></dl>
+<dl><dt><a name="surfaceLattice-addCurveAttractor"><strong>addCurveAttractor</strong></a>(self, component, curve, range)</dt></dl>
 
-<dl><dt><a name="surfaceLattice-setAttractor"><strong>setAttractor</strong></a>(self, a)</dt><dd><tt>#pass&nbsp;in&nbsp;an&nbsp;array&nbsp;of&nbsp;attractors&nbsp;[["unit_0.obj",&nbsp;[0,0,0],&nbsp;20],&nbsp;["unit_1.obj",&nbsp;[4,36,22],&nbsp;20]]</tt></dd></dl>
+<dl><dt><a name="surfaceLattice-addPlaneAttractor"><strong>addPlaneAttractor</strong></a>(self, component, plane, range)</dt></dl>
+
+<dl><dt><a name="surfaceLattice-addPointAttractor"><strong>addPointAttractor</strong></a>(self, component, point, range)</dt></dl>
+
+<dl><dt><a name="surfaceLattice-run"><strong>run</strong></a>(self, token)</dt></dl>
 
 <dl><dt><a name="surfaceLattice-setBin"><strong>setBin</strong></a>(self, bin)</dt><dd><tt>#(float)&nbsp;Set&nbsp;the&nbsp;bin&nbsp;value.</tt></dd></dl>
 
@@ -103,14 +64,6 @@ The&nbsp;height&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;cell&nbsp;height&nbsp
 
 <dl><dt><a name="surfaceLattice-setTopSurface"><strong>setTopSurface</strong></a>(self, ceil)</dt><dd><tt>#(string)&nbsp;Define&nbsp;the&nbsp;second&nbsp;surface.&nbsp;Lattice&nbsp;units&nbsp;can&nbsp;be&nbsp;populated&nbsp;between&nbsp;two&nbsp;surfaces&nbsp;of&nbsp;differnt&nbsp;shape&nbsp;with&nbsp;the&nbsp;same&nbsp;topology.</tt></dd></dl>
 
-<dl><dt><a name="surfaceLattice-surfaceLatticeStatic"><strong>surfaceLatticeStatic</strong></a>(self, token)</dt><dd><tt>Populte&nbsp;a&nbsp;lattice&nbsp;unit&nbsp;ontop&nbsp;of&nbsp;one&nbsp;surface.&nbsp;The&nbsp;height&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;cell&nbsp;height&nbsp;variable.</tt></dd></dl>
-
-<dl><dt><a name="surfaceLattice-twoSurfaceAttractors"><strong>twoSurfaceAttractors</strong></a>(self, token)</dt><dd><tt>Populte&nbsp;multiple&nbsp;lattice&nbsp;units&nbsp;between&nbsp;wo&nbsp;surfaces.<br>
-The&nbsp;distribution&nbsp;of&nbsp;those&nbsp;units&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;distance&nbsp;from&nbsp;a&nbsp;set&nbsp;of&nbsp;attractors.<br>
-The&nbsp;height&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;cell&nbsp;height&nbsp;variable.</tt></dd></dl>
-
-<dl><dt><a name="surfaceLattice-twoSurfaceLatticeStatic"><strong>twoSurfaceLatticeStatic</strong></a>(self, token)</dt><dd><tt>Populate&nbsp;lattice&nbsp;units&nbsp;between&nbsp;a&nbsp;top&nbsp;and&nbsp;bottom&nbsp;surface.</tt></dd></dl>
-
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -123,7 +76,17 @@ The&nbsp;height&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;cell&nbsp;height&nbsp
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="volumeLattice-__init__"><strong>__init__</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="volumeLattice-setAttractor"><strong>setAttractor</strong></a>(self, a)</dt><dd><tt>#input&nbsp;an&nbsp;array&nbsp;with&nbsp;all&nbsp;the&nbsp;attractor&nbsp;information.&nbsp;[["unit_0.obj",&nbsp;[0,0,0],&nbsp;20],&nbsp;["unit_1.obj",&nbsp;[4,36,22],&nbsp;20]]</tt></dd></dl>
+<dl><dt><a name="volumeLattice-addCurveAttractor"><strong>addCurveAttractor</strong></a>(self, component, curve, range)</dt></dl>
+
+<dl><dt><a name="volumeLattice-addPlaneAttractor"><strong>addPlaneAttractor</strong></a>(self, component, plane, range)</dt></dl>
+
+<dl><dt><a name="volumeLattice-addPointAttractor"><strong>addPointAttractor</strong></a>(self, component, point, range)</dt></dl>
+
+<dl><dt><a name="volumeLattice-run"><strong>run</strong></a>(self, token)</dt><dd><tt>The&nbsp;volume&nbsp;lattice&nbsp;function&nbsp;generates&nbsp;arrays&nbsp;of&nbsp;a&nbsp;given&nbsp;lattice&nbsp;structure&nbsp;across&nbsp;a&nbsp;volume&nbsp;in&nbsp;a&nbsp;parametric&nbsp;fashion.&nbsp;The&nbsp;input&nbsp;parameters&nbsp;take&nbsp;in&nbsp;a&nbsp;base&nbsp;component&nbsp;of&nbsp;the&nbsp;volume&nbsp;and&nbsp;a&nbsp;module&nbsp;to&nbsp;be&nbsp;arrayed.&nbsp;Other&nbsp;parameters&nbsp;like&nbsp;component&nbsp;size&nbsp;help&nbsp;define&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;module&nbsp;which&nbsp;is&nbsp;arrayed.</tt></dd></dl>
+
+<dl><dt><a name="volumeLattice-runStochastic"><strong>runStochastic</strong></a>(self, token)</dt><dd><tt>The&nbsp;stochastic&nbsp;lattice&nbsp;function&nbsp;creates&nbsp;a&nbsp;randomly&nbsp;seeded&nbsp;lattice&nbsp;structure&nbsp;inside&nbsp;a&nbsp;given&nbsp;volume.&nbsp;The&nbsp;density&nbsp;can&nbsp;be&nbsp;controlled&nbsp;using&nbsp;the&nbsp;pore&nbsp;size.</tt></dd></dl>
+
+<dl><dt><a name="volumeLattice-setComponent"><strong>setComponent</strong></a>(self, component)</dt><dd><tt>#(string)&nbsp;Set&nbsp;the&nbsp;file&nbsp;name&nbsp;for&nbsp;the&nbsp;component&nbsp;to&nbsp;be&nbsp;populated&nbsp;to&nbsp;lattice&nbsp;structure</tt></dd></dl>
 
 <dl><dt><a name="volumeLattice-setComponentSize"><strong>setComponentSize</strong></a>(self, cellHeight)</dt><dd><tt>#(float)&nbsp;This&nbsp;is&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;lattice&nbsp;grid.&nbsp;For&nbsp;one&nbsp;unit.</tt></dd></dl>
 
@@ -132,13 +95,6 @@ The&nbsp;height&nbsp;is&nbsp;defined&nbsp;by&nbsp;the&nbsp;cell&nbsp;height&nbsp
 <dl><dt><a name="volumeLattice-setPoreSize"><strong>setPoreSize</strong></a>(self, pore)</dt><dd><tt>#(float)&nbsp;For&nbsp;stochastic&nbsp;lattices&nbsp;only.&nbsp;This&nbsp;will&nbsp;be&nbsp;the&nbsp;miniumum&nbsp;pore&nbsp;size&nbsp;for&nbsp;the&nbsp;stochastic&nbsp;lasttice.</tt></dd></dl>
 
 <dl><dt><a name="volumeLattice-setVolume"><strong>setVolume</strong></a>(self, volume)</dt><dd><tt>#(String)&nbsp;set&nbsp;the&nbsp;volume&nbsp;you&nbsp;want&nbsp;to&nbsp;fill&nbsp;with&nbsp;the&nbsp;lattice</tt></dd></dl>
-
-<dl><dt><a name="volumeLattice-stochasticLatticeStatic"><strong>stochasticLatticeStatic</strong></a>(self, token)</dt><dd><tt>The&nbsp;stochastic&nbsp;lattice&nbsp;function&nbsp;creates&nbsp;a&nbsp;randomly&nbsp;seeded&nbsp;lattice&nbsp;structure&nbsp;inside&nbsp;a&nbsp;given&nbsp;volume.&nbsp;The&nbsp;density&nbsp;can&nbsp;be&nbsp;controlled&nbsp;using&nbsp;the&nbsp;pore&nbsp;size.</tt></dd></dl>
-
-<dl><dt><a name="volumeLattice-volumeLatticeAttractor"><strong>volumeLatticeAttractor</strong></a>(self, token)</dt><dd><tt>The&nbsp;volume&nbsp;lattice&nbsp;function&nbsp;generates&nbsp;arrays&nbsp;of&nbsp;a&nbsp;given&nbsp;lattice&nbsp;structure&nbsp;across&nbsp;a&nbsp;volume&nbsp;in&nbsp;a&nbsp;parametric&nbsp;fashion.<br>
-This&nbsp;function&nbsp;is&nbsp;much&nbsp;like&nbsp;volumeLatticeStatic&nbsp;with&nbsp;the&nbsp;difference&nbsp;that&nbsp;it&nbsp;can&nbsp;also&nbsp;use&nbsp;an&nbsp;array&nbsp;of&nbsp;attractors&nbsp;to&nbsp;make&nbsp;blended&nbsp;structures.</tt></dd></dl>
-
-<dl><dt><a name="volumeLattice-volumeLatticeStatic"><strong>volumeLatticeStatic</strong></a>(self, token)</dt><dd><tt>The&nbsp;volume&nbsp;lattice&nbsp;function&nbsp;generates&nbsp;arrays&nbsp;of&nbsp;a&nbsp;given&nbsp;lattice&nbsp;structure&nbsp;across&nbsp;a&nbsp;volume&nbsp;in&nbsp;a&nbsp;parametric&nbsp;fashion.&nbsp;The&nbsp;input&nbsp;parameters&nbsp;take&nbsp;in&nbsp;a&nbsp;base&nbsp;component&nbsp;of&nbsp;the&nbsp;volume&nbsp;and&nbsp;a&nbsp;module&nbsp;to&nbsp;be&nbsp;arrayed.&nbsp;Other&nbsp;parameters&nbsp;like&nbsp;component&nbsp;size&nbsp;help&nbsp;define&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;module&nbsp;which&nbsp;is&nbsp;arrayed.</tt></dd></dl>
 
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -159,23 +115,27 @@ Input1:(string)&nbsp;Name&nbsp;of&nbsp;first&nbsp;.obj&nbsp;component&nbsp;file&
 Input2:(string)&nbsp;Name&nbsp;of&nbsp;second&nbsp;.obj&nbsp;component&nbsp;file&nbsp;uploaded&nbsp;to&nbsp;storage.<br>
 Output:(string)&nbsp;Result&nbsp;file&nbsp;name&nbsp;for&nbsp;the&nbsp;boolean&nbsp;operation&nbsp;in&nbsp;.obj&nbsp;format.<br>
 Operation:(string)&nbsp;Choose&nbsp;one&nbsp;from&nbsp;union,difference&nbsp;and&nbsp;intersection.</tt></dd></dl>
- <dl><dt><a name="-convexHull"><strong>convexHull</strong></a>(a, token)</dt><dd><tt>The&nbsp;convex&nbsp;hull&nbsp;function&nbsp;creates&nbsp;a&nbsp;boundary&nbsp;around&nbsp;the&nbsp;outermost&nbsp;laying&nbsp;points.&nbsp;It&nbsp;is&nbsp;used&nbsp;to&nbsp;get&nbsp;a&nbsp;sense&nbsp;of&nbsp;size&nbsp;of&nbsp;the&nbsp;point&nbsp;cloud&nbsp;field.<br>
+ <dl><dt><a name="-convexHull"><strong>convexHull</strong></a>(points, token)</dt><dd><tt>The&nbsp;convex&nbsp;hull&nbsp;function&nbsp;creates&nbsp;a&nbsp;boundary&nbsp;around&nbsp;the&nbsp;outermost&nbsp;laying&nbsp;points.&nbsp;It&nbsp;is&nbsp;used&nbsp;to&nbsp;get&nbsp;a&nbsp;sense&nbsp;of&nbsp;size&nbsp;of&nbsp;the&nbsp;point&nbsp;cloud&nbsp;field.<br>
 Input&nbsp;is&nbsp;an&nbsp;array</tt></dd></dl>
- <dl><dt><a name="-cylindricalProjection"><strong>cylindricalProjection</strong></a>(target, resolution, height, output, center, range, startDir, rotateAxis, token)</dt><dd><tt>The&nbsp;cylindrical&nbsp;projection&nbsp;function&nbsp;wraps&nbsp;a&nbsp;cylindrical&nbsp;mesh&nbsp;around&nbsp;the&nbsp;input&nbsp;mesh.&nbsp;It&nbsp;can&nbsp;used&nbsp;to&nbsp;shrink&nbsp;wrap&nbsp;the&nbsp;mesh&nbsp;and&nbsp;create&nbsp;a&nbsp;new&nbsp;cleaner&nbsp;and&nbsp;refined&nbsp;mesh.&nbsp;The&nbsp;target&nbsp;and&nbsp;resolution&nbsp;can&nbsp;basic&nbsp;inputs&nbsp;required,&nbsp;whereas&nbsp;advance&nbsp;inputs&nbsp;include&nbsp;defining&nbsp;a&nbsp;center,&nbsp;and&nbsp;axis&nbsp;for&nbsp;the&nbsp;projection.&nbsp;This&nbsp;projection&nbsp;is&nbsp;made&nbsp;using&nbsp;a&nbsp;cylindrical&nbsp;base.<br>
+ <dl><dt><a name="-cylindricalProjection"><strong>cylindricalProjection</strong></a>(target, resolution, height, output, token, center<font color="#909090">=''</font>, range<font color="#909090">=''</font>, startDir<font color="#909090">=''</font>, rotationAxis<font color="#909090">=''</font>)</dt><dd><tt>The&nbsp;cylindrical&nbsp;projection&nbsp;function&nbsp;wraps&nbsp;a&nbsp;cylindrical&nbsp;mesh&nbsp;around&nbsp;the&nbsp;input&nbsp;mesh.&nbsp;It&nbsp;can&nbsp;used&nbsp;to&nbsp;shrink&nbsp;wrap&nbsp;the&nbsp;mesh&nbsp;and&nbsp;create&nbsp;a&nbsp;new&nbsp;cleaner&nbsp;and&nbsp;refined&nbsp;mesh.&nbsp;The&nbsp;target&nbsp;and&nbsp;resolution&nbsp;can&nbsp;basic&nbsp;inputs&nbsp;required,&nbsp;whereas&nbsp;advance&nbsp;inputs&nbsp;include&nbsp;defining&nbsp;a&nbsp;center,&nbsp;and&nbsp;axis&nbsp;for&nbsp;the&nbsp;projection.&nbsp;This&nbsp;projection&nbsp;is&nbsp;made&nbsp;using&nbsp;a&nbsp;cylindrical&nbsp;base.<br>
 &nbsp;<br>
 Target:&nbsp;(string)&nbsp;The&nbsp;uploaded&nbsp;.Obj&nbsp;target&nbsp;to&nbsp;be&nbsp;projected&nbsp;on.<br>
 Resolution:&nbsp;(int)&nbsp;Is&nbsp;the&nbsp;number&nbsp;cells&nbsp;in&nbsp;U&nbsp;and&nbsp;V&nbsp;direction.<br>
 Height:(float)&nbsp;&nbsp;Height&nbsp;of&nbsp;cylinder&nbsp;to&nbsp;be&nbsp;projected.<br>
-File&nbsp;Name:(string)&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;file&nbsp;for&nbsp;the&nbsp;surface&nbsp;lattice.</tt></dd></dl>
- <dl><dt><a name="-delaunay"><strong>delaunay</strong></a>(a, token)</dt><dd><tt>The&nbsp;delaunay&nbsp;triangulation&nbsp;function&nbsp;creates&nbsp;triangular&nbsp;connections&nbsp;in&nbsp;2D&nbsp;and&nbsp;3D.&nbsp;The&nbsp;input&nbsp;is&nbsp;a&nbsp;point&nbsp;cloud&nbsp;array&nbsp;in&nbsp;any&nbsp;dimensions.<br>
+File&nbsp;Name:(string)&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;file&nbsp;for&nbsp;the&nbsp;surface&nbsp;lattice.<br>
+&nbsp;<br>
+OPTIONAL:<br>
+to&nbsp;be&nbsp;added</tt></dd></dl>
+ <dl><dt><a name="-delaunay"><strong>delaunay</strong></a>(points, token)</dt><dd><tt>The&nbsp;delaunay&nbsp;triangulation&nbsp;function&nbsp;creates&nbsp;triangular&nbsp;connections&nbsp;in&nbsp;2D&nbsp;and&nbsp;3D.&nbsp;The&nbsp;input&nbsp;is&nbsp;a&nbsp;point&nbsp;cloud&nbsp;array&nbsp;in&nbsp;any&nbsp;dimensions.<br>
 Input&nbsp;is&nbsp;an&nbsp;array</tt></dd></dl>
- <dl><dt><a name="-genLatticeUnit"><strong>genLatticeUnit</strong></a>(case, chamfer, centerChamfer, bendIn, cBendIn, connectPt, output, token)</dt><dd><tt>Case:(float)&nbsp;Is&nbsp;an&nbsp;integer&nbsp;value&nbsp;between&nbsp;0&nbsp;-&nbsp;7,&nbsp;&nbsp;defining&nbsp;different&nbsp;type&nbsp;of&nbsp;lattice&nbsp;units.<br>
+ <dl><dt><a name="-download"><strong>download</strong></a>(name, location, token)</dt><dd><tt>Download&nbsp;files&nbsp;from&nbsp;the&nbsp;genysis&nbsp;servers.</tt></dd></dl>
+ <dl><dt><a name="-genLatticeUnit"><strong>genLatticeUnit</strong></a>(case, chamfer, centerChamfer, bendIn, cBendIn, connectPt, output, token)</dt><dd><tt>Case:(Integer)&nbsp;Is&nbsp;an&nbsp;integer&nbsp;value&nbsp;between&nbsp;0&nbsp;-&nbsp;7,&nbsp;&nbsp;defining&nbsp;different&nbsp;type&nbsp;of&nbsp;lattice&nbsp;units.<br>
 Chamfer:(float)&nbsp;Is&nbsp;a&nbsp;float&nbsp;value&nbsp;between&nbsp;0&nbsp;to&nbsp;0.5&nbsp;defining&nbsp;the&nbsp;angle&nbsp;of&nbsp;chamfer&nbsp;of&nbsp;the&nbsp;corners.<br>
 Center&nbsp;Chamfer:(float)&nbsp;Is&nbsp;a&nbsp;float&nbsp;value&nbsp;between&nbsp;0&nbsp;to&nbsp;0.5&nbsp;defining&nbsp;the&nbsp;angle&nbsp;of&nbsp;chamfer&nbsp;from&nbsp;the&nbsp;center.<br>
 Bendln:(float)&nbsp;Is&nbsp;a&nbsp;float&nbsp;value&nbsp;between&nbsp;0&nbsp;and&nbsp;1,&nbsp;defining&nbsp;angle&nbsp;bend&nbsp;of&nbsp;the&nbsp;lines.<br>
 cBendln:(float)&nbsp;&nbsp;Is&nbsp;a&nbsp;float&nbsp;value&nbsp;between&nbsp;0&nbsp;and&nbsp;1,defining&nbsp;the&nbsp;central&nbsp;bend&nbsp;of&nbsp;the&nbsp;lines.<br>
 Connect&nbsp;Pt:(float)&nbsp;&nbsp;Is&nbsp;a&nbsp;float&nbsp;value&nbsp;between&nbsp;0&nbsp;and&nbsp;1,&nbsp;defining&nbsp;the&nbsp;connection&nbsp;points.</tt></dd></dl>
- <dl><dt><a name="-marchingCube"><strong>marchingCube</strong></a>(lines, resolution, memberThickness, filename, token)</dt><dd><tt>The&nbsp;marching&nbsp;cubes&nbsp;function&nbsp;is&nbsp;used&nbsp;to&nbsp;create&nbsp;a&nbsp;mesh&nbsp;from&nbsp;the&nbsp;given&nbsp;line&nbsp;input.&nbsp;Is&nbsp;it&nbsp;used&nbsp;to&nbsp;create&nbsp;a&nbsp;thickness&nbsp;that&nbsp;can&nbsp;be&nbsp;defined&nbsp;by&nbsp;the&nbsp;user,&nbsp;as&nbsp;well&nbsp;as&nbsp;the&nbsp;resolution.<br>
+ <dl><dt><a name="-marchingCube"><strong>marchingCube</strong></a>(lines, resolution, memberThickness, filename, token, preview<font color="#909090">=''</font>)</dt><dd><tt>The&nbsp;marching&nbsp;cubes&nbsp;function&nbsp;is&nbsp;used&nbsp;to&nbsp;create&nbsp;a&nbsp;mesh&nbsp;from&nbsp;the&nbsp;given&nbsp;line&nbsp;input.&nbsp;Is&nbsp;it&nbsp;used&nbsp;to&nbsp;create&nbsp;a&nbsp;thickness&nbsp;that&nbsp;can&nbsp;be&nbsp;defined&nbsp;by&nbsp;the&nbsp;user,&nbsp;as&nbsp;well&nbsp;as&nbsp;the&nbsp;resolution.<br>
 &nbsp;<br>
 Lines:(string)&nbsp;Is&nbsp;the&nbsp;uploaded&nbsp;.obj&nbsp;file&nbsp;containing&nbsp;lines&nbsp;to&nbsp;be&nbsp;meshed&nbsp;by&nbsp;Marching&nbsp;Cubes&nbsp;algorithm.<br>
 Resolution:(int)&nbsp;&nbsp;Is&nbsp;the&nbsp;integer&nbsp;value&nbsp;between&nbsp;from&nbsp;64&nbsp;to&nbsp;600,&nbsp;defining&nbsp;the&nbsp;resolution&nbsp;of&nbsp;the&nbsp;meshing&nbsp;operation.&nbsp;Lower&nbsp;value&nbsp;gives&nbsp;a&nbsp;more&nbsp;coarse&nbsp;result,&nbsp;whereas&nbsp;a&nbsp;higher&nbsp;value&nbsp;gives&nbsp;out&nbsp;a&nbsp;more&nbsp;refined&nbsp;result.<br>
@@ -198,12 +158,16 @@ Direction:(vector)&nbsp;3D&nbsp;vector&nbsp;defining,&nbsp;the&nbsp;direction&nb
 Size:(2D&nbsp;vector)&nbsp;&nbsp;Is&nbsp;the&nbsp;[U,V]&nbsp;input&nbsp;defining&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;projected&nbsp;plane.<br>
 Resolution:(int)&nbsp;Is&nbsp;the&nbsp;number&nbsp;cells&nbsp;in&nbsp;U&nbsp;and&nbsp;V&nbsp;direction.<br>
 File&nbsp;Name:(string)&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;file&nbsp;for&nbsp;the&nbsp;surface&nbsp;lattice.</tt></dd></dl>
- <dl><dt><a name="-sphericalProjection"><strong>sphericalProjection</strong></a>(target, center, resolution, range, rotateAxis, output, token)</dt><dd><tt>The&nbsp;spherical&nbsp;projection&nbsp;function&nbsp;works&nbsp;by&nbsp;wraps&nbsp;a&nbsp;given&nbsp;mesh&nbsp;with&nbsp;a&nbsp;sphere&nbsp;either&nbsp;partially&nbsp;or&nbsp;whole&nbsp;in&nbsp;order&nbsp;to&nbsp;create&nbsp;a&nbsp;clean&nbsp;base&nbsp;surface&nbsp;from&nbsp;the&nbsp;input.&nbsp;The&nbsp;target&nbsp;and&nbsp;resolution&nbsp;can&nbsp;basic&nbsp;inputs&nbsp;required,&nbsp;whereas&nbsp;advance&nbsp;inputs&nbsp;include&nbsp;defining&nbsp;a&nbsp;center,&nbsp;and&nbsp;axis&nbsp;for&nbsp;the&nbsp;projection.&nbsp;This&nbsp;projection&nbsp;is&nbsp;made&nbsp;using&nbsp;a&nbsp;spherical&nbsp;base.<br>
+ <dl><dt><a name="-sphericalProjection"><strong>sphericalProjection</strong></a>(target, resolution, output, token, center<font color="#909090">=''</font>, range<font color="#909090">=''</font>, startDir<font color="#909090">=''</font>, rotationAxis<font color="#909090">=''</font>)</dt><dd><tt>The&nbsp;spherical&nbsp;projection&nbsp;function&nbsp;works&nbsp;by&nbsp;wraps&nbsp;a&nbsp;given&nbsp;mesh&nbsp;with&nbsp;a&nbsp;sphere&nbsp;either&nbsp;partially&nbsp;or&nbsp;whole&nbsp;in&nbsp;order&nbsp;to&nbsp;create&nbsp;a&nbsp;clean&nbsp;base&nbsp;surface&nbsp;from&nbsp;the&nbsp;input.&nbsp;The&nbsp;target&nbsp;and&nbsp;resolution&nbsp;can&nbsp;basic&nbsp;inputs&nbsp;required,&nbsp;whereas&nbsp;advance&nbsp;inputs&nbsp;include&nbsp;defining&nbsp;a&nbsp;center,&nbsp;and&nbsp;axis&nbsp;for&nbsp;the&nbsp;projection.&nbsp;This&nbsp;projection&nbsp;is&nbsp;made&nbsp;using&nbsp;a&nbsp;spherical&nbsp;base.<br>
 &nbsp;<br>
 Target:(String)&nbsp;The&nbsp;uploaded&nbsp;.Obj&nbsp;target&nbsp;to&nbsp;be&nbsp;projected&nbsp;on.<br>
 Resolution:&nbsp;(int)&nbsp;Is&nbsp;the&nbsp;number&nbsp;cells&nbsp;in&nbsp;U&nbsp;and&nbsp;V&nbsp;direction.<br>
-File&nbsp;Name:(string)&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;file&nbsp;for&nbsp;the&nbsp;surface&nbsp;lattice.</tt></dd></dl>
- <dl><dt><a name="-voronoi"><strong>voronoi</strong></a>(a, token)</dt><dd><tt>The&nbsp;voronoi&nbsp;function&nbsp;creates&nbsp;partitions&nbsp;based&nbsp;on&nbsp;distance&nbsp;between&nbsp;the&nbsp;input&nbsp;points.<br>
+File&nbsp;Name:(string)&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;file&nbsp;for&nbsp;the&nbsp;surface&nbsp;lattice.<br>
+&nbsp;<br>
+OPTIONAL:<br>
+to&nbsp;be&nbsp;added</tt></dd></dl>
+ <dl><dt><a name="-upload"><strong>upload</strong></a>(name, token)</dt><dd><tt>Upload&nbsp;files&nbsp;from&nbsp;the&nbsp;genysis&nbsp;servers.</tt></dd></dl>
+ <dl><dt><a name="-voronoi"><strong>voronoi</strong></a>(points, token)</dt><dd><tt>The&nbsp;voronoi&nbsp;function&nbsp;creates&nbsp;partitions&nbsp;based&nbsp;on&nbsp;distance&nbsp;between&nbsp;the&nbsp;input&nbsp;points.<br>
 Input&nbsp;is&nbsp;an&nbsp;array</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -212,6 +176,6 @@ Input&nbsp;is&nbsp;an&nbsp;array</tt></dd></dl>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>__all__</strong> = ['volumeLattice', 'conformalVolume', 'surfaceLattice', 'cylindricalProjection', 'sphericalProjection', 'planarProjection', 'boolean', 'convexHull', 'voronoi', 'delaunay', 'blend', 'meshSplit', 'meshReduce', 'genLatticeUnit', 'marchingCube']<br>
-<strong>__version__</strong> = '0.1.7'</td></tr></table>
+<td width="100%"><strong>__all__</strong> = ['volumeLattice', 'conformalVolume', 'surfaceLattice', 'cylindricalProjection', 'sphericalProjection', 'planarProjection', 'boolean', 'convexHull', 'voronoi', 'delaunay', 'blend', 'meshSplit', 'meshReduce', 'genLatticeUnit', 'marchingCube', 'download', 'upload']<br>
+<strong>__version__</strong> = '0.2.0'</td></tr></table>
 </body></html>

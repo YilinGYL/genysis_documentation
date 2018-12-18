@@ -16,7 +16,7 @@ mechP.setPoreSize(1.5) #units are mm
 mechP.setOutput(MPfilename)
 
 #generate the lattice (this is a large part and it might take a min or two...)
-mechP.stochasticLatticeStatic(token)
+mechP.runStochastic(token)
 
 #apply marchingCube function to transform the lattice into a mesh for 3D print.
 #marchingCube(lines,resolution,memberThickness,filename,token):

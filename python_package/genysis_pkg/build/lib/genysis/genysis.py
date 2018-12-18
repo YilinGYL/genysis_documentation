@@ -1,16 +1,63 @@
 import requests
 import json
-import ast
+import webbrowser
 
-#does this user have a differnt download url?
-# def download(name,location,token):
-#     url="https://studiobitonti.appspot.com/storage/download?name=%s&t=%s" % (name,token)
-#     print(url)
-#     #write content
-#     with open(url, 'wb') as f:
-#         f.write(r.content)
+API = "https://studiobitonti.appspot.com"
+# API = "http://localhost:3000"
 
-def cylindricalProjection(target,resolution,height,output,center,range,startDir,rotateAxis,token):
+# internal function for response parsing and error handling
+def parseResponse(r,printResult = False):
+    if r.status_code == 200:
+        if printResult:
+            print('response: ',r.text)
+        return json.loads(r.text)
+    else:
+        raise RuntimeError(r.text)
+
+
+# File management functions
+def download(name,location,token):
+    """
+    Download files from the genysis servers.
+    Name: location on the genysis servers.
+    location: local file name/path
+    """
+    url= "%s/storage/download?name=%s&t=%s" % (API,name,token)
+    r = requests.get(url, allow_redirects=True)
+    parseResponse(r)
+    open(location, 'wb').write(r.content)
+    print('successfully downloaded to %s' % location)
+    return
+
+def upload(name,token):
+    """
+    Upload files from the genysis servers.
+    Name: local file name/path
+    """
+    url="https://studiobitonti.appspot.com/storage/upload"
+    files = {'upload_file': open(name,'rb')}
+    values = {'t': token}
+    r = requests.post(url, files=files, data=values)
+    return parseResponse(r,printResult=True)
+
+def listFiles(token):
+    url="%s/storage/list?t=%s" % (API,token)
+    r = requests.get(url, allow_redirects=True)
+    return parseResponse(r,printResult=True)
+
+def visualize(name,token):
+    """
+    open a default browser window to visualize a geometry file given its name and user token
+    """
+    webbrowser.open('%s/apps/visualize?name=%s&t=%s'%(API,name,token))
+
+def latticeUnitDesign(name='',token=''):
+    """
+    open a default browser window to for the lattice unit design app
+    """
+    webbrowser.open('%s/apps/visualize/latticeUnit.html?name=%s&t=%s'%(API,name,token))
+
+def cylindricalProjection(target,resolution,height,output,token,center='',range='',startDir='',rotationAxis=''):
     """
     The cylindrical projection function wraps a cylindrical mesh around the input mesh. It can used to shrink wrap the mesh and create a new cleaner and refined mesh. The target and resolution can basic inputs required, whereas advance inputs include defining a center, and axis for the projection. This projection is made using a cylindrical base.
 
@@ -18,26 +65,35 @@ def cylindricalProjection(target,resolution,height,output,center,range,startDir,
     Resolution: (int) Is the number cells in U and V direction.
     Height:(float)  Height of cylinder to be projected.
     File Name:(string)  Name of the resultant file for the surface lattice.
+
+    OPTIONAL:
+    to be added
+
     """
-    url ="https://studiobitonti.appspot.com/cylindricalProjection"
-    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotateAxis":rotateAxis,"start_dir":startDir,"height":height,"filename":output,"t":token}
+    url ="%s/cylindricalProjection" % API
+    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotation_axis":rotationAxis,"start_dir":startDir,"height":height,"filename":output,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
-def sphericalProjection(target,center,resolution,range,rotateAxis,output,token):
+def sphericalProjection(target,resolution,output,token,center='',range='',startDir='',rotationAxis=''):
     """
     The spherical projection function works by wraps a given mesh with a sphere either partially or whole in order to create a clean base surface from the input. The target and resolution can basic inputs required, whereas advance inputs include defining a center, and axis for the projection. This projection is made using a spherical base.
 
     Target:(String) The uploaded .Obj target to be projected on.
     Resolution: (int) Is the number cells in U and V direction.
     File Name:(string)  Name of the resultant file for the surface lattice.
+
+    OPTIONAL:
+    to be added
     """
-    url ="https://studiobitonti.appspot.com/sphericalProjection"
-    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotateAxis":rotateAxis,"filename":output,"t":token}
+    url ="%s/sphericalProjection" % API
+    payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotation_axis":rotationAxis,"start_dir":startDir,"filename":output,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
 def planarProjection(target,center,direction,size,resolution,output,token):
     """
@@ -50,11 +106,12 @@ def planarProjection(target,center,direction,size,resolution,output,token):
     Resolution:(int) Is the number cells in U and V direction.
     File Name:(string)  Name of the resultant file for the surface lattice.
     """
-    url ="https://studiobitonti.appspot.com/planeProjection"
+    url ="%s/planeProjection" % API
     payload = {"target":target,"center":center,"direction": direction,"size":size,"resolution":resolution,"filename":output,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
 def boolean(input1,input2,output,operation,token): #operations are Union, Interset and Difference
     """
@@ -65,44 +122,48 @@ def boolean(input1,input2,output,operation,token): #operations are Union, Inters
     Output:(string) Result file name for the boolean operation in .obj format.
     Operation:(string) Choose one from union,difference and intersection.
     """
-    url ="https://studiobitonti.appspot.com/boolean"
+    url ="%s/boolean" % API
     payload = {"input1":input1,"input2":input2,"operation":operation,"output":output,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
-def convexHull(a,token):
+def convexHull(points,token):
     """
     The convex hull function creates a boundary around the outermost laying points. It is used to get a sense of size of the point cloud field.
     Input is an array
     """
-    url ="https://studiobitonti.appspot.com/convexHull"
-    payload = {"points":a,"t":token}
+    url ="%s/convexHull" % API
+    payload = {"points":points,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
-def voronoi(a,token):
+def voronoi(points,token):
     """
     The voronoi function creates partitions based on distance between the input points.
     Input is an array
     """
-    url ="https://studiobitonti.appspot.com/voronoi"
-    payload = {"points":a,"t":token}
+    url ="%s/voronoi" % API
+    payload = {"points":points,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
-def delaunay(a,token):
+def delaunay(points,token):
     """
     The delaunay triangulation function creates triangular connections in 2D and 3D. The input is a point cloud array in any dimensions.
     Input is an array
     """
-    url ="https://studiobitonti.appspot.com/delaunay"
-    payload = {"points":a,"t":token}
+    url ="%s/delaunay" % API
+    payload = {"points":points,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
 def blend(compA,compB,value,output,token):
     """
@@ -113,13 +174,13 @@ def blend(compA,compB,value,output,token):
     filename:(string) target output file name
     value:(float)  float between 0 and 1, the blend position between compA and compB
     """
-    url ="https://studiobitonti.appspot.com/blend"
+    url ="%s/blend" % API
     payload = {"compA":compA,"compB":compB,"value":value,"filename":output,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
-#not working Li will check backend
 def meshSplit(target,output,token):
     """
     The split mesh function breaks down the given mesh input into its component mesh parts.
@@ -127,11 +188,12 @@ def meshSplit(target,output,token):
     Target:(string)  Name of input .obj/.stl file uploaded to storage
     Filename:(string) Target output file name
     """
-    url ="https://studiobitonti.appspot.com/meshSplit"
+    url ="%s/meshSplit" % API
     payload = {"target":target,"filename":output,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
 def meshReduce(target,output,portion,token):
     """
@@ -141,40 +203,30 @@ def meshReduce(target,output,portion,token):
     output:(string) the name of the new mesh after reduction.
     portion:(float) the percentage you wish to reduce the mesh.
     """
-    url ="https://studiobitonti.appspot.com/meshreduction"
+    url ="%s/meshreduction" % API
     payload = {"target":target,"portion":portion,"filename":output,"t":token}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
 def genLatticeUnit(case,chamfer,centerChamfer,bendIn,cBendIn,connectPt,output,token):
     """
-    Case:(float) Is an integer value between 0 - 7,  defining different type of lattice units.
+    Case:(Integer) Is an integer value between 0 - 7,  defining different type of lattice units.
     Chamfer:(float) Is a float value between 0 to 0.5 defining the angle of chamfer of the corners.
     Center Chamfer:(float) Is a float value between 0 to 0.5 defining the angle of chamfer from the center.
     Bendln:(float) Is a float value between 0 and 1, defining angle bend of the lines.
     cBendln:(float)  Is a float value between 0 and 1,defining the central bend of the lines.
     Connect Pt:(float)  Is a float value between 0 and 1, defining the connection points.
     """
-    url = "https://studiobitonti.appspot.com/latticeUnit"
+    url = "%s/latticeUnit" % API
     payload = {"case":case,"chamfer":chamfer,"centerChamfer":centerChamfer,"bendIn":bendIn,"cBendIn":cBendIn,"connectPt":connectPt,"filename":output,"t":token}
     print(json.dumps(payload))
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
-
-def parseComponents(a):
-    bodyMain=""
-    for i in range(len(a)):
-        body="{\"component\":\"%s\",\"attractor\":{\"point\":%s,\"range\":%s}}" % (a[i][0],a[i][1],a[i][2])
-        if(i>0):
-            bodyMain+=","+body
-        else:
-            bodyMain+=body
-    final="\"blendTargets\":["+bodyMain+"]}"
-    return final
-
-def marchingCube(lines,resolution,memberThickness,filename,token):
+def marchingCube(lines,resolution,memberThickness,filename,token,preview=''):
     """
     The marching cubes function is used to create a mesh from the given line input. Is it used to create a thickness that can be defined by the user, as well as the resolution.
 
@@ -183,11 +235,12 @@ def marchingCube(lines,resolution,memberThickness,filename,token):
     Member Thickness:(float)  Is a float value defining the radius of the line members being meshed.
     Filename:(string) Name of the resultant file of the meshed object.
     """
-    url = "https://studiobitonti.appspot.com/marchingCube"
-    payload = {"lines":lines,"resolution":resolution,"memberThickness":memberThickness,"filename":filename,"t":token}
+    url = "%s/marchingCube" % API
+    payload = {"lines":lines,"resolution":resolution,"memberThickness":memberThickness,"filename":filename,"t":token,"preview":preview}
+    payload = {k: v for k, v in payload.items() if v} # clean None inputs
     print(json.dumps(payload))
     r = requests.post(url,json=payload)
-    return r.text
+    return parseResponse(r,printResult=True)
 
 class volumeLattice:
     """
@@ -195,23 +248,17 @@ class volumeLattice:
     """
     def __init__(self): #set global variables
         #URL is always this.
-        #self.url = "https://studiobitonti.appspot.com/stochasticLattice"
-        self.url = "https://studiobitonti.appspot.com/volumeLattice"
-        self.urlStochastic = "https://studiobitonti.appspot.com/stochasticLattice"
+        self.url = "%s/volumeLattice" % API
+        self.urlStochastic = "%s/stochasticLattice" % API
         #variables that need to be set by the user.
-        self.poreSize=0.1
+        self.poreSize=""
         self.volume=""
         self.output=""
-        self.component="unit_1.obj"
-        self.componentSize=1
-        #attactors will be formated as an 2D array "["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]"
-        #default values are files included in sample repo.
-        self.attractorSet=[["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]
+        self.component=""
+        self.componentSize=""
+        self.attractorSet=[]
 
 #functions for seting key variables
-    #input an array with all the attractor information. [["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]
-    def setAttractor(self,a): #attractors are optional (blended lattices only)
-        self.attractorSet=a
     #(string) Set the file name for the exported lattice structure
     def setOutput(self,output):#file name that you want to save out
         self.output=output
@@ -224,46 +271,43 @@ class volumeLattice:
     #(float) This is the size of the lattice grid. For one unit.
     def setComponentSize(self,cellHeight):#size of componet in a static or graded grid
         self.componentSize=cellHeight
+    #(string) Set the file name for the component to be populated to lattice structure
+    def setComponent(self,component):
+        self.component=component
+
+    #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
+    def addPointAttractor(self,component,point,range):
+        self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
+    #add plane attractor. For example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)
+    def addPlaneAttractor(self,component,plane,range):
+        self.attractorSet.append({"component":component,"attractor":{"plane":plane,"range":range}})
+    #add curve attractor. For example: (component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)
+    def addCurveAttractor(self,component,curve,range):
+        self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
 
 #lattice generation functions
 
-    def stochasticLatticeStatic(self,token):
+    def runStochastic(self,token):
         """
         The stochastic lattice function creates a randomly seeded lattice structure inside a given volume. The density can be controlled using the pore size.
         """
         payload = {"volume":self.volume,"poreSize":self.poreSize,"filename":self.output,"t":token}
+        payload = {k: v for k, v in payload.items() if v} # clean None inputs
         print(json.dumps(payload))
         #make post request
         r = requests.post(self.urlStochastic,json=payload)
-        print(r.text)
-        return r.text
+        return parseResponse(r,printResult=True)
 
-    def volumeLatticeStatic(self,token):
+    def run(self,token):
         """
         The volume lattice function generates arrays of a given lattice structure across a volume in a parametric fashion. The input parameters take in a base component of the volume and a module to be arrayed. Other parameters like component size help define the size of the module which is arrayed.
         """
         payload = {"component":self.component,"volume":self.volume,"componentSize":self.componentSize,"filename":self.output,"t":token}
+        payload = {k: v for k, v in payload.items() if v} # clean None inputs
         print(json.dumps(payload))
         #make post request
         r = requests.post(self.url,json=payload)
-        print(r.text)
-        return r.text
-
-    def volumeLatticeAttractor(self,token):
-        """
-        The volume lattice function generates arrays of a given lattice structure across a volume in a parametric fashion.
-        This function is much like volumeLatticeStatic with the difference that it can also use an array of attractors to make blended structures.
-        """
-        #get attractor information
-        att=parseComponents(self.attractorSet)
-        payload = "{\"component\":\"%s\",\"volume\":\"%s\",\"componentSize\":%s,\"filename\": \"%s\",\"t\":\"%s\",%s" % (self.component,self.volume,self.componentSize,self.output,token,att)
-        print(payload)
-        #convert paylod to dictionary
-        dict=ast.literal_eval(payload)
-        #make post request
-        r = requests.post(self.url,json=dict)
-        print(r.text)
-        return r.text
+        return parseResponse(r,printResult=True)
 
 class surfaceLattice:
     """
@@ -274,25 +318,23 @@ class surfaceLattice:
         Initialize
         """
         #URL is always this.
-        self.url = "https://studiobitonti.appspot.com/surfaceLattice"
+        self.url = "%s/surfaceLattice"%(API)
+        # self.url = "http://localhost:3000/surfaceLattice"
         #Always True
-        self.autoScale="true"
-        self.ESIPLON=1
-        self.bin="true"
+        self.autoScale=True
+        self.ESIPLON=0.01
+        self.bin=False
         #variables that need to be set by the user.
-        self.output = ""
+        self.output = None
         self.cellHeight=1
         #attactors will be formated as an 2D array [["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]"
         #default values are files included in sample repo.
-        self.attractorSet=[["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]
-        self.component="unit_1.obj"
-        self.base="Base_Surface.obj"
-        self.ceil="Ciel_CompB.obj"
+        self.attractorSet=[]
+        self.component=None
+        self.base=None
+        self.ceil=None
 
 #functions for seting key variables
-    #pass in an array of attractors [["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]
-    def setAttractor(self,a): #attractors are optional (blended lattices only)
-        self.attractorSet=a
     #(float) Set the bin value.
     def setBin(self,bin):
         self.bin=bin
@@ -315,65 +357,41 @@ class surfaceLattice:
     def setComponent(self,component):
         self.component=component
 
+    #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
+    def addPointAttractor(self,component,point,range):
+        self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
+    #add plane attractor. For example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)
+    def addPlaneAttractor(self,component,plane,range):
+        self.attractorSet.append({"component":component,"attractor":{"plane":plane,"range":range}})
+    #add curve attractor. For example: (component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)
+    def addCurveAttractor(self,component,curve,range):
+        self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
+
 #lattice generation functions
 
-    def twoSurfaceAttractors(self,token):#Lattice between two surfaces with attractors for blended lattice
-        """
-        Populte multiple lattice units between wo surfaces.
-        The distribution of those units is defined by the distance from a set of attractors.
-        The height is defined by the cell height variable.
-        """
-        #get attractor information
-        att=parseComponents(self.attractorSet)
-        payload = "{\"component\":\"%s\",\"base\":\"%s\",\"cellHeight\":%s,\"filename\": \"%s\",\"t\":\"%s\",%s" % (self.component,self.base,self.cellHeight,self.output,token,att)
-        print(payload)
-        #convert paylod to dictionary
-        dict=ast.literal_eval(payload)
-        #make post request
-        r = requests.post(self.url,json=dict)
-        print(r.text)
-        return r.text
+    def run(self,token):
 
-    def oneSurfaceLatticeAttractors(self,token):#Lattice on one surface with a constant offset with attractors for blended lattice
-        """
-        Populte multiple lattice units on top of one surface.
-        The distribution of those units is defined by the distance from a set of attractors.
-        The height is defined by the cell height variable.
-        """
-        #get attractor information
-        att=parseComponents(self.attractorSet)
-        payload = "{\"component\":\"%s\",\"base\":\"%s\",\"cellHeight\":%s,\"filename\": \"%s\",\"t\":\"%s\",%s" % (self.component,self.base,self.cellHeight,self.output,token,att)
-        print(payload)
-        #convert paylod to dictionary
-        dict=ast.literal_eval(payload)
-        #make post request
-        r = requests.post(self.url,json=dict)
-        print(r.text)
-        return r.text
+        # put together request body inputs
+        payload = {
+            "component": self.component,
+            "base": self.base,
+            "ceil": self.ceil,
+            "cellHeight": self.cellHeight,
+            "filename": self.output,
+            "blendTargets": self.attractorSet,
+            "t": token
+        }
 
-    def surfaceLatticeStatic(self,token): #Lattice on one surface with a constant offset
-        """
-        Populte a lattice unit ontop of one surface. The height is defined by the cell height variable.
-        """
-        payload = {"component":self.component,"base":self.base,"cellHeight":self.cellHeight,"filename":self.output,"t":token}
+        # clean None inputs
+        payload = {k: v for k, v in payload.items() if v}
         print(json.dumps(payload))
-        #make post request
-        r = requests.post(self.url,json=payload)
-        print(r.text)
-        return r.text
 
-    def twoSurfaceLatticeStatic(self,token):#Lattice structure between two surfaces
-        """
-        Populate lattice units between a top and bottom surface.
-        """
-        payload = {"component":self.component,"base":self.base,"cellHeight":self.cellHeight,"filename":self.output,"t":token,"ceil":self.ceil,"autoScale":self.autoScale,"ESIPLON":self.ESIPLON,"bin":self.bin}
-        print(json.dumps(payload))
-        #make post request
+        # make post request
         r = requests.post(self.url,json=payload)
-        print(r.text)
-        return r.text
+        return parseResponse(r,printResult = True)
 
-class conformalVolume:
+
+class conformalLattice:
     """
     This object of for lattices that conform their shape to volumes.
     """
@@ -382,25 +400,21 @@ class conformalVolume:
         Initialize
         """
         #URL is always this.
-        self.urlGrid = "https://studiobitonti.appspot.com/conformalGrid"
-        self.urlPopulate = "https://studiobitonti.appspot.com/boxMorph"
+        self.urlGrid = "%s/conformalGrid" % API
+        self.urlPopulate = "%s/boxMorph" % API
         #variables that need to be set by the user.
-        self.u=65
-        self.v=18
-        self.w=3
-        self.unitize="true"
-        self.export="Board_Lattice.obj"
-        self.component="box2.obj"
-        self.surfaces="Skate.json"#This will be a JSON file with the surface points organized
-        self.gridOutput="Skate_Grid.json"#grid output will be JSON format
+        self.u=''
+        self.v=''
+        self.w=''
+        self.unitize=''
+        self.output=''
+        self.component=''
+        self.surfaces=''
+        self.gridOutput='temp_grid.json'
         self.boxes=""
-        #attactors will be formated as an 2D array "["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]"
-        #default values are files included in sample repo.
-        self.attractorSet=[["unit_0.obj", [0,0,0], 20], ["unit_1.obj", [4,36,22], 20]]
+        self.attractorSet=[]
 
 #functions for seting key variables
-    def setAttractor(self,a): #attractors are optional (blended lattices only)
-        self.attractorSet=a
     def setUVW(self,u,v,w):
         """
         U: Input the number of grid cells in u direction.
@@ -414,14 +428,27 @@ class conformalVolume:
     def setUnitize(self,unitize):
         self.unitize=unitize
     #(string) Component: Is the uploaded .Obj component to be arrayed.
-    def setComponent(self,unitize):
-        self.unitize=unitize
+    def setComponent(self,component):
+        self.component=component
     #(string) Name of the uploaded .json file of surface grid representations.
     def setSurfaces(self,surfaces):
         self.surfaces=surfaces
     #(string) Name of the .json file for export.
     def setGridOutput(self,gridOutput):#file name that you want to save out
         self.gridOutput=gridOutput
+    #(string) Name of lattice file for export.
+    def setOutput(self,output):#file name that you want to save out
+        self.output=output
+
+    #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
+    def addPointAttractor(self,component,point,range):
+        self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
+    #add plane attractor. For example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)
+    def addPlaneAttractor(self,component,plane,range):
+        self.attractorSet.append({"component":component,"attractor":{"plane":plane,"range":range}})
+    #add curve attractor. For example: (component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)
+    def addCurveAttractor(self,component,curve,range):
+        self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
 
 #Generate conformalGrid
     def genGrid(self,token):
@@ -434,12 +461,13 @@ class conformalVolume:
         Surface: Name of the uploaded .json file of surface grid representations.
         Filename: Name of the resultant file for the lattice unit.
         """
-        url ="https://studiobitonti.appspot.com/meshreduction"
         payload = {"u":self.u,"v":self.v,"w":self.w,"unitize":self.unitize,"surfaces":self.surfaces,"filename":self.gridOutput,"t":token}
-        self.boxes=self.gridOutput
+        payload = {k: v for k, v in payload.items() if v}
         print(json.dumps(payload))
         r = requests.post(self.urlGrid,json=payload)
-        return r.text
+        r = parseResponse(r,printResult = True)
+        self.boxes=self.gridOutput
+        return r
 
 #Populate conformal lattice
     def populateLattice(self,token):#Lattice on one surface with a constant offset with attractors for blended lattice
@@ -451,12 +479,10 @@ class conformalVolume:
         File Name:  Name of the resultant file for the surface lattice.
         """
         #get attractor information
-        att=parseComponents(self.attractorSet)
-        payload = "{\"boxes\":\"%s\",\"component\":\"%s\",\"filename\": \"%s\",\"t\":\"%s\",%s" % (self.boxes,self.component,self.export,token,att)
-        print(payload)
-        #convert paylod to dictionary
-        dict=ast.literal_eval(payload)
+
+        payload = {"boxes":self.gridOutput,"component":self.component,"filename":self.output,"t":token,"blendTargets":self.attractorSet}
+        payload = {k: v for k, v in payload.items() if v}
+        print(json.dumps(payload))
         #make post request
-        r = requests.post(self.urlPopulate,json=dict)
-        print(r.text)
-        return r.text
+        r = requests.post(self.urlPopulate,json=payload)
+        return parseResponse(r,printResult = True)

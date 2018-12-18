@@ -17,14 +17,23 @@ def parseResponse(r,printResult = False):
 
 # File management functions
 def download(name,location,token):
+    """
+    Download files from the genysis servers.
+    Name: location on the genysis servers.
+    location: local file name/path
+    """
     url= "%s/storage/download?name=%s&t=%s" % (API,name,token)
     r = requests.get(url, allow_redirects=True)
     parseResponse(r)
     open(location, 'wb').write(r.content)
     print('successfully downloaded to %s' % location)
-    return 
+    return
 
 def upload(name,token):
+    """
+    Upload files from the genysis servers.
+    Name: local file name/path
+    """
     url="https://studiobitonti.appspot.com/storage/upload"
     files = {'upload_file': open(name,'rb')}
     values = {'t': token}
@@ -266,10 +275,13 @@ class volumeLattice:
     def setComponent(self,component):
         self.component=component
 
+    #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
     def addPointAttractor(self,component,point,range):
         self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
+    #add plane attractor. For example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)
     def addPlaneAttractor(self,component,plane,range):
         self.attractorSet.append({"component":component,"attractor":{"plane":plane,"range":range}})
+    #add curve attractor. For example: (component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)
     def addCurveAttractor(self,component,curve,range):
         self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
 
@@ -345,17 +357,20 @@ class surfaceLattice:
     def setComponent(self,component):
         self.component=component
 
+    #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
     def addPointAttractor(self,component,point,range):
         self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
+    #add plane attractor. For example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)
     def addPlaneAttractor(self,component,plane,range):
         self.attractorSet.append({"component":component,"attractor":{"plane":plane,"range":range}})
+    #add curve attractor. For example: (component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)
     def addCurveAttractor(self,component,curve,range):
         self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
 
 #lattice generation functions
 
     def run(self,token):
-        
+
         # put together request body inputs
         payload = {
             "component": self.component,
@@ -370,7 +385,7 @@ class surfaceLattice:
         # clean None inputs
         payload = {k: v for k, v in payload.items() if v}
         print(json.dumps(payload))
-        
+
         # make post request
         r = requests.post(self.url,json=payload)
         return parseResponse(r,printResult = True)
@@ -425,10 +440,13 @@ class conformalLattice:
     def setOutput(self,output):#file name that you want to save out
         self.output=output
 
+    #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
     def addPointAttractor(self,component,point,range):
         self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
+    #add plane attractor. For example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)
     def addPlaneAttractor(self,component,plane,range):
         self.attractorSet.append({"component":component,"attractor":{"plane":plane,"range":range}})
+    #add curve attractor. For example: (component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)
     def addCurveAttractor(self,component,curve,range):
         self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
 
@@ -461,7 +479,7 @@ class conformalLattice:
         File Name:  Name of the resultant file for the surface lattice.
         """
         #get attractor information
-        
+
         payload = {"boxes":self.gridOutput,"component":self.component,"filename":self.output,"t":token,"blendTargets":self.attractorSet}
         payload = {k: v for k, v in payload.items() if v}
         print(json.dumps(payload))

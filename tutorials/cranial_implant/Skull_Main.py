@@ -11,7 +11,7 @@ cellName = "cell_1.obj"
 #create a lattice unit
 #genLatticeUnit(case,chamfer,centerChamfer,bendIn,cBendIn,connectPt,output,token):
 #bug:function is currently not accepting 0.0 as a value
-genysis.genLatticeUnit(7,0.5,0.01,1.0,0.01,1,cellName,token)
+genysis.genLatticeUnit(7,0.01,0.01,0.01,0.01,1.0,cellName,token)
 
 #create a surface lattice class
 cranial =genysis.surfaceLattice()
@@ -23,7 +23,7 @@ cranial.setOutput(MPfilename)
 cranial.setComponent(cellName)
 
 #Generate the lattice. It will be saved as implant.obj
-cranial.surfaceLatticeStatic(token)
+cranial.run(token)
 
 #the function will return a list of STL filesself.
 #high density meshes are computed distriubted for speed.
@@ -33,19 +33,15 @@ print(final)
 #Now lets generate one with a gradient
 #First set up a new lattice component to blend into
 newBlendTarget = "cell_2.obj"
-genysis.genLatticeUnit(7,0.01,0.01,0.01,0.01,1,newBlendTarget,token)
-
-#set up variables for the
-attractorCenter = [1.6,90.4,0.6]
-radius = 2
-attractor=[[newBlendTarget,attractorCenter,radius]]
+genysis.genLatticeUnit(7,0.01,0.01,0.01,1.0,1,newBlendTarget,token)
 
 #set the values needed for this function
-cranial.setAttractor(attractor)
+cranial.addPointAttractor(newBlendTarget,point=[1.6,90.4,0.6],range=2)
+
 cranial.setOutput("implant_2.obj")
 
 #generate new lattive with attractor.
-cranial.oneSurfaceLatticeAttractors(token)
+cranial.run(token)
 
 #the function will return a list of STL filesself.
 #high density meshes are computed distriubted for speed.
