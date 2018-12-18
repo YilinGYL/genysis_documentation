@@ -42,11 +42,11 @@
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="surfaceLattice-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialize</tt></dd></dl>
 
-<dl><dt><a name="surfaceLattice-addCurveAttractor"><strong>addCurveAttractor</strong></a>(self, component, curve, range)</dt></dl>
+<dl><dt><a name="surfaceLattice-addCurveAttractor"><strong>addCurveAttractor</strong></a>(self, component, curve, range)</dt><dd><tt>#add&nbsp;curve&nbsp;attractor.&nbsp;For&nbsp;example:&nbsp;(component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)</tt></dd></dl>
 
-<dl><dt><a name="surfaceLattice-addPlaneAttractor"><strong>addPlaneAttractor</strong></a>(self, component, plane, range)</dt></dl>
+<dl><dt><a name="surfaceLattice-addPlaneAttractor"><strong>addPlaneAttractor</strong></a>(self, component, plane, range)</dt><dd><tt>#add&nbsp;plane&nbsp;attractor.&nbsp;For&nbsp;example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)</tt></dd></dl>
 
-<dl><dt><a name="surfaceLattice-addPointAttractor"><strong>addPointAttractor</strong></a>(self, component, point, range)</dt></dl>
+<dl><dt><a name="surfaceLattice-addPointAttractor"><strong>addPointAttractor</strong></a>(self, component, point, range)</dt><dd><tt>#add&nbsp;point&nbsp;attractor.&nbsp;For&nbsp;example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)</tt></dd></dl>
 
 <dl><dt><a name="surfaceLattice-run"><strong>run</strong></a>(self, token)</dt></dl>
 
@@ -76,11 +76,11 @@
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="volumeLattice-__init__"><strong>__init__</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="volumeLattice-addCurveAttractor"><strong>addCurveAttractor</strong></a>(self, component, curve, range)</dt></dl>
+<dl><dt><a name="volumeLattice-addCurveAttractor"><strong>addCurveAttractor</strong></a>(self, component, curve, range)</dt><dd><tt>#add&nbsp;curve&nbsp;attractor.&nbsp;For&nbsp;example:&nbsp;(component="unit_1.obj",curve=[[2.8,8,2.7],[-3.3,8,2.7],[-3.3,14,6]],range=2)</tt></dd></dl>
 
-<dl><dt><a name="volumeLattice-addPlaneAttractor"><strong>addPlaneAttractor</strong></a>(self, component, plane, range)</dt></dl>
+<dl><dt><a name="volumeLattice-addPlaneAttractor"><strong>addPlaneAttractor</strong></a>(self, component, plane, range)</dt><dd><tt>#add&nbsp;plane&nbsp;attractor.&nbsp;For&nbsp;example:(component="cell_2.obj",plane=[0,1,0,-5],range=10)</tt></dd></dl>
 
-<dl><dt><a name="volumeLattice-addPointAttractor"><strong>addPointAttractor</strong></a>(self, component, point, range)</dt></dl>
+<dl><dt><a name="volumeLattice-addPointAttractor"><strong>addPointAttractor</strong></a>(self, component, point, range)</dt><dd><tt>#add&nbsp;point&nbsp;attractor.&nbsp;For&nbsp;example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)</tt></dd></dl>
 
 <dl><dt><a name="volumeLattice-run"><strong>run</strong></a>(self, token)</dt><dd><tt>The&nbsp;volume&nbsp;lattice&nbsp;function&nbsp;generates&nbsp;arrays&nbsp;of&nbsp;a&nbsp;given&nbsp;lattice&nbsp;structure&nbsp;across&nbsp;a&nbsp;volume&nbsp;in&nbsp;a&nbsp;parametric&nbsp;fashion.&nbsp;The&nbsp;input&nbsp;parameters&nbsp;take&nbsp;in&nbsp;a&nbsp;base&nbsp;component&nbsp;of&nbsp;the&nbsp;volume&nbsp;and&nbsp;a&nbsp;module&nbsp;to&nbsp;be&nbsp;arrayed.&nbsp;Other&nbsp;parameters&nbsp;like&nbsp;component&nbsp;size&nbsp;help&nbsp;define&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;module&nbsp;which&nbsp;is&nbsp;arrayed.</tt></dd></dl>
 
@@ -128,7 +128,9 @@ OPTIONAL:<br>
 to&nbsp;be&nbsp;added</tt></dd></dl>
  <dl><dt><a name="-delaunay"><strong>delaunay</strong></a>(points, token)</dt><dd><tt>The&nbsp;delaunay&nbsp;triangulation&nbsp;function&nbsp;creates&nbsp;triangular&nbsp;connections&nbsp;in&nbsp;2D&nbsp;and&nbsp;3D.&nbsp;The&nbsp;input&nbsp;is&nbsp;a&nbsp;point&nbsp;cloud&nbsp;array&nbsp;in&nbsp;any&nbsp;dimensions.<br>
 Input&nbsp;is&nbsp;an&nbsp;array</tt></dd></dl>
- <dl><dt><a name="-download"><strong>download</strong></a>(name, location, token)</dt><dd><tt>Download&nbsp;files&nbsp;from&nbsp;the&nbsp;genysis&nbsp;servers.</tt></dd></dl>
+ <dl><dt><a name="-download"><strong>download</strong></a>(name, location, token)</dt><dd><tt>Download&nbsp;files&nbsp;from&nbsp;the&nbsp;genysis&nbsp;servers.<br>
+Name:&nbsp;location&nbsp;on&nbsp;the&nbsp;genysis&nbsp;servers.<br>
+location:&nbsp;local&nbsp;file&nbsp;name/path</tt></dd></dl>
  <dl><dt><a name="-genLatticeUnit"><strong>genLatticeUnit</strong></a>(case, chamfer, centerChamfer, bendIn, cBendIn, connectPt, output, token)</dt><dd><tt>Case:(Integer)&nbsp;Is&nbsp;an&nbsp;integer&nbsp;value&nbsp;between&nbsp;0&nbsp;-&nbsp;7,&nbsp;&nbsp;defining&nbsp;different&nbsp;type&nbsp;of&nbsp;lattice&nbsp;units.<br>
 Chamfer:(float)&nbsp;Is&nbsp;a&nbsp;float&nbsp;value&nbsp;between&nbsp;0&nbsp;to&nbsp;0.5&nbsp;defining&nbsp;the&nbsp;angle&nbsp;of&nbsp;chamfer&nbsp;of&nbsp;the&nbsp;corners.<br>
 Center&nbsp;Chamfer:(float)&nbsp;Is&nbsp;a&nbsp;float&nbsp;value&nbsp;between&nbsp;0&nbsp;to&nbsp;0.5&nbsp;defining&nbsp;the&nbsp;angle&nbsp;of&nbsp;chamfer&nbsp;from&nbsp;the&nbsp;center.<br>
@@ -166,7 +168,8 @@ File&nbsp;Name:(string)&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;resultant&nbsp;fil
 &nbsp;<br>
 OPTIONAL:<br>
 to&nbsp;be&nbsp;added</tt></dd></dl>
- <dl><dt><a name="-upload"><strong>upload</strong></a>(name, token)</dt><dd><tt>Upload&nbsp;files&nbsp;from&nbsp;the&nbsp;genysis&nbsp;servers.</tt></dd></dl>
+ <dl><dt><a name="-upload"><strong>upload</strong></a>(name, token)</dt><dd><tt>Upload&nbsp;files&nbsp;from&nbsp;the&nbsp;genysis&nbsp;servers.<br>
+Name:&nbsp;local&nbsp;file&nbsp;name/path</tt></dd></dl>
  <dl><dt><a name="-voronoi"><strong>voronoi</strong></a>(points, token)</dt><dd><tt>The&nbsp;voronoi&nbsp;function&nbsp;creates&nbsp;partitions&nbsp;based&nbsp;on&nbsp;distance&nbsp;between&nbsp;the&nbsp;input&nbsp;points.<br>
 Input&nbsp;is&nbsp;an&nbsp;array</tt></dd></dl>
 </td></tr></table><p>
