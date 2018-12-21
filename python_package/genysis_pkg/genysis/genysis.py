@@ -6,7 +6,7 @@ API = "https://studiobitonti.appspot.com"
 # API = "http://localhost:3000"
 
 # internal function for response parsing and error handling
-def parseResponse(r,printResult = False):
+def parseResponse(r,printResult = True):
     if r.status_code == 200:
         if printResult:
             print('response: ',r.text)
@@ -14,6 +14,13 @@ def parseResponse(r,printResult = False):
     else:
         raise RuntimeError(r.text)
 
+def send(url,payload,printPayload = True,printResult = True):
+
+    payload = {k: v for k, v in payload.items() if v!= ''} # clean None inputs
+    if printPayload:
+        print('request: ',json.dumps(payload))
+    r = requests.post(url,json=payload)
+    return parseResponse(r,printResult)
 
 # File management functions
 def download(name,location,token):
@@ -72,10 +79,7 @@ def cylindricalProjection(target,resolution,height,output,token,center='',range=
     """
     url ="%s/cylindricalProjection" % API
     payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotation_axis":rotationAxis,"start_dir":startDir,"height":height,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def sphericalProjection(target,resolution,output,token,center='',range='',startDir='',rotationAxis=''):
     """
@@ -90,10 +94,7 @@ def sphericalProjection(target,resolution,output,token,center='',range='',startD
     """
     url ="%s/sphericalProjection" % API
     payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotation_axis":rotationAxis,"start_dir":startDir,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def planarProjection(target,center,direction,size,resolution,output,token):
     """
@@ -108,10 +109,7 @@ def planarProjection(target,center,direction,size,resolution,output,token):
     """
     url ="%s/planeProjection" % API
     payload = {"target":target,"center":center,"direction": direction,"size":size,"resolution":resolution,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def boolean(input1,input2,output,operation,token): #operations are Union, Interset and Difference
     """
@@ -124,10 +122,7 @@ def boolean(input1,input2,output,operation,token): #operations are Union, Inters
     """
     url ="%s/boolean" % API
     payload = {"input1":input1,"input2":input2,"operation":operation,"output":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def convexHull(points,token):
     """
@@ -136,10 +131,7 @@ def convexHull(points,token):
     """
     url ="%s/convexHull" % API
     payload = {"points":points,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def voronoi(points,token):
     """
@@ -148,10 +140,7 @@ def voronoi(points,token):
     """
     url ="%s/voronoi" % API
     payload = {"points":points,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def delaunay(points,token):
     """
@@ -160,10 +149,7 @@ def delaunay(points,token):
     """
     url ="%s/delaunay" % API
     payload = {"points":points,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def blend(compA,compB,value,output,token):
     """
@@ -176,10 +162,7 @@ def blend(compA,compB,value,output,token):
     """
     url ="%s/blend" % API
     payload = {"compA":compA,"compB":compB,"value":value,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def meshSplit(target,output,token):
     """
@@ -190,10 +173,7 @@ def meshSplit(target,output,token):
     """
     url ="%s/meshSplit" % API
     payload = {"target":target,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def meshReduce(target,output,portion,token):
     """
@@ -205,10 +185,7 @@ def meshReduce(target,output,portion,token):
     """
     url ="%s/meshreduction" % API
     payload = {"target":target,"portion":portion,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def genLatticeUnit(case,chamfer,centerChamfer,bendIn,cBendIn,connectPt,output,token):
     """
@@ -221,10 +198,7 @@ def genLatticeUnit(case,chamfer,centerChamfer,bendIn,cBendIn,connectPt,output,to
     """
     url = "%s/latticeUnit" % API
     payload = {"case":case,"chamfer":chamfer,"centerChamfer":centerChamfer,"bendIn":bendIn,"cBendIn":cBendIn,"connectPt":connectPt,"filename":output,"t":token}
-    print(json.dumps(payload))
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def marchingCube(lines,resolution,memberThickness,filename,token,preview=''):
     """
@@ -237,10 +211,7 @@ def marchingCube(lines,resolution,memberThickness,filename,token,preview=''):
     """
     url = "%s/marchingCube" % API
     payload = {"lines":lines,"resolution":resolution,"memberThickness":memberThickness,"filename":filename,"t":token,"preview":preview}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 class volumeLattice:
     """
@@ -292,22 +263,14 @@ class volumeLattice:
         once all the variables are set you will run this function to generate a stochastic lattice.
         """
         payload = {"volume":self.volume,"poreSize":self.poreSize,"filename":self.output,"t":token}
-        payload = {k: v for k, v in payload.items() if v} # clean None inputs
-        print(json.dumps(payload))
-        #make post request
-        r = requests.post(self.urlStochastic,json=payload)
-        return parseResponse(r,printResult=True)
-
+        return send(self.urlStochastic,payload)
+        
     def run(self,token):
         """
         once all the variables are set you will run this function to generate the lattice.
         """
         payload = {"component":self.component,"volume":self.volume,"componentSize":self.componentSize,"filename":self.output,"t":token}
-        payload = {k: v for k, v in payload.items() if v} # clean None inputs
-        print(json.dumps(payload))
-        #make post request
-        r = requests.post(self.url,json=payload)
-        return parseResponse(r,printResult=True)
+        return send(self.url,payload)
 
 class surfaceLattice:
     """
@@ -384,13 +347,7 @@ class surfaceLattice:
             "t": token
         }
 
-        # clean None inputs
-        payload = {k: v for k, v in payload.items() if v}
-        print(json.dumps(payload))
-
-        # make post request
-        r = requests.post(self.url,json=payload)
-        return parseResponse(r,printResult = True)
+        return send(self.url,payload)
 
 
 class conformalLattice:
@@ -464,12 +421,8 @@ class conformalLattice:
         Filename: Name of the resultant file for the lattice unit.
         """
         payload = {"u":self.u,"v":self.v,"w":self.w,"unitize":self.unitize,"surfaces":self.surfaces,"filename":self.gridOutput,"t":token}
-        payload = {k: v for k, v in payload.items() if v}
-        print(json.dumps(payload))
-        r = requests.post(self.urlGrid,json=payload)
-        r = parseResponse(r,printResult = True)
         self.boxes=self.gridOutput
-        return r
+        return send(self.urlGrid,payload)
 
 #Populate conformal lattice
     def populateLattice(self,token):#Lattice on one surface with a constant offset with attractors for blended lattice
@@ -483,8 +436,4 @@ class conformalLattice:
         #get attractor information
 
         payload = {"boxes":self.gridOutput,"component":self.component,"filename":self.output,"t":token,"blendTargets":self.attractorSet}
-        payload = {k: v for k, v in payload.items() if v}
-        print(json.dumps(payload))
-        #make post request
-        r = requests.post(self.urlPopulate,json=payload)
-        return parseResponse(r,printResult = True)
+        return send(self.urlPopulate,payload)
