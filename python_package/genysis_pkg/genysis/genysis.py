@@ -52,11 +52,19 @@ def listFiles(token):
     r = requests.get(url, allow_redirects=True)
     return parseResponse(r,printResult=True)
 
-def visualize(name,token):
+def visualize(name,token,displayInJupyter=False):
     """
     open a default browser window to visualize a geometry file given its name and user token
     """
-    webbrowser.open('%s/apps/visualize?name=%s&t=%s'%(API,name,token))
+
+    url = '%s/apps/visualize?name=%s&t=%s'%(API,name,token)
+    print(url)
+    if displayInJupyter:
+        from IPython.display import IFrame
+        IFrame(url, width=600, height=500)
+    else:
+        webbrowser.open(url)
+    return url
 
 def latticeUnitDesign(name='',token=''):
     """
