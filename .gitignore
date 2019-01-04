@@ -1,2 +1,5 @@
-
+*.ipynb-checkpoints
 *.pyc
+dist
+build
+genysis.egg-info

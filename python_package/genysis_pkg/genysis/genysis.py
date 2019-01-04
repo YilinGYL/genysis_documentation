@@ -1,16 +1,32 @@
 import requests
 import json
 import webbrowser
+import os 
 
 API = "https://studiobitonti.appspot.com"
 # API = "http://localhost:3000"
+print('Welcome to GENYSIS')
+
+def fileManager(token='',displayInLine = False,width=600, height=500):
+    url = "%s/?t=%s" % (API,token)
+
+    print(url)
+    if displayInLine:
+        from IPython.display import IFrame    
+        display(IFrame(url, width, height))
+    else: 
+        webbrowser.open(url)
+    return url
 
 # internal function for response parsing and error handling
-def parseResponse(r,printResult = True):
+def parseResponse(r,printResult = True, parseJSON = True):
     if r.status_code == 200:
         if printResult:
             print('response: ',r.text)
-        return json.loads(r.text)
+        if parseJSON:
+            return json.loads(r.text)
+        else: 
+            return
     else:
         raise RuntimeError(r.text)
 
@@ -23,46 +39,47 @@ def send(url,payload,printPayload = True,printResult = True):
     return parseResponse(r,printResult)
 
 # File management functions
-def download(name,location,token):
+def download(src = '',dest = '',token = ''):
     """
     Download files from the genysis servers.
-    Name: location on the genysis servers.
-    location: local file name/path
+    src: location on the genysis servers.
+    dest: local file name/path
     """
-    url= "%s/storage/download?name=%s&t=%s" % (API,name,token)
+    url= "%s/storage/download?name=%s&t=%s" % (API,src,token)
     r = requests.get(url, allow_redirects=True)
-    parseResponse(r)
-    open(location, 'wb').write(r.content)
-    print('successfully downloaded to %s' % location)
+    parseResponse(r,printResult = False,parseJSON = False) # just to check response status
+    open(dest, 'wb').write(r.content)
+    print('successfully downloaded to %s/%s' % (os.getcwd(),dest))
     return
 
-def upload(name,token):
+def upload(src = '',token = ''):
     """
     Upload files from the genysis servers.
-    Name: local file name/path
+    src: local file name/path
     """
-    url="https://studiobitonti.appspot.com/storage/upload"
-    files = {'upload_file': open(name,'rb')}
+    url= "%s/storage/upload" % API
+    files = {'upload_file': open(src,'rb')}
     values = {'t': token}
     r = requests.post(url, files=files, data=values)
-    return parseResponse(r,printResult=True)
+    parseResponse(r,printResult = False,parseJSON = False) # just to check response status
+    print('successfully uploaded to %s' % (src))
+    return 
 
 def listFiles(token):
     url="%s/storage/list?t=%s" % (API,token)
     r = requests.get(url, allow_redirects=True)
-    return parseResponse(r,printResult=True)
+    return parseResponse(r,printResult=False)
 
-def visualize(name,token,displayInJupyter=False):
+def visualize(name,token,displayInLine=False,width=800, height=600):
     """
     open a default browser window to visualize a geometry file given its name and user token
     """
-
     url = '%s/apps/visualize?name=%s&t=%s'%(API,name,token)
     print(url)
-    if displayInJupyter:
-        from IPython.display import IFrame
-        IFrame(url, width=600, height=500)
-    else:
+    if displayInLine:
+        from IPython.display import IFrame    
+        display(IFrame(url, width, height))
+    else: 
         webbrowser.open(url)
     return url
 
