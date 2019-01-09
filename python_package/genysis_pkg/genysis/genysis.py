@@ -2,6 +2,7 @@ import requests
 import json
 import webbrowser
 import os 
+from .meshRepair import *
 
 API = "https://studiobitonti.appspot.com"
 # API = "http://localhost:3000"
