@@ -84,11 +84,18 @@ def visualize(name,token,displayInLine=False,width=800, height=600):
         webbrowser.open(url)
     return url
 
-def latticeUnitDesign(name='',token=''):
+def latticeUnitDesign(name='',token='',displayInLine=False,width=800, height=600):
     """
     open a default browser window to for the lattice unit design app
     """
-    webbrowser.open('%s/apps/visualize/latticeUnit.html?name=%s&t=%s'%(API,name,token))
+    url = '%s/apps/visualize/latticeUnit.html?name=%s&t=%s'%(API,name,token)
+    print(url)
+    if displayInLine:
+        from IPython.display import IFrame    
+        display(IFrame(url, width, height))
+    else: 
+        webbrowser.open(url)
+    return url
 
 def cylindricalProjection(target,resolution,height,output,token,center='',range='',startDir='',rotationAxis=''):
     """
@@ -346,6 +353,9 @@ class surfaceLattice:
     def setComponent(self,component):
         self.component=component
 
+    def setAutoScale(self,autoScale):
+        self.autoScale = autoScale
+
     #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
     def addPointAttractor(self,component,point,range):
         self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
@@ -370,6 +380,7 @@ class surfaceLattice:
             "cellHeight": self.cellHeight,
             "filename": self.output,
             "blendTargets": self.attractorSet,
+            "autoScale": self.autoScale,
             "t": token
         }
 
@@ -398,6 +409,7 @@ class conformalLattice:
         self.gridOutput='temp_grid.json'
         self.boxes=""
         self.attractorSet=[]
+        self.EPSILON = 0.01
 
 #functions for seting key variables
     def setUVW(self,u,v,w):
@@ -424,6 +436,8 @@ class conformalLattice:
     #(string) Name of lattice file for export.
     def setOutput(self,output):#file name that you want to save out
         self.output=output
+    def setEPSILON(self,EPSILON):
+        self.EPSILON=EPSILON
 
     #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
     def addPointAttractor(self,component,point,range):
@@ -436,6 +450,18 @@ class conformalLattice:
         self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
 
 #Generate conformalGrid
+    def designGrid(self,token,displayInLine=False,width=800, height=600):
+    
+        url = '%s/apps/visualize/gridDesign.html?surfaces=%s&t=%s&filename=%s'%(API,self.surfaces,token,self.gridOutput)
+        print(url)
+        if displayInLine:
+            from IPython.display import IFrame    
+            display(IFrame(url, width, height))
+        else: 
+            webbrowser.open(url)
+        return url
+
+
     def genGrid(self,token):
         """
         The conformal grid function generates a grid structure inside a given mesh input. The U,V,W are variables for the number of the grid cells.
@@ -461,5 +487,5 @@ class conformalLattice:
         """
         #get attractor information
 
-        payload = {"boxes":self.gridOutput,"component":self.component,"filename":self.output,"t":token,"blendTargets":self.attractorSet}
+        payload = {"boxes":self.gridOutput,"component":self.component,"filename":self.output,"t":token,"blendTargets":self.attractorSet,"EPSILON":self.EPSILON}
         return send(self.urlPopulate,payload)

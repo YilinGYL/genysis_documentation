@@ -1,61 +1,101 @@
 import requests
 import json
 import webbrowser
+import os 
+from .meshRepair import *
 
 API = "https://studiobitonti.appspot.com"
 # API = "http://localhost:3000"
+print('Welcome to GENYSIS')
+
+def fileManager(token='',displayInLine = False,width=600, height=500):
+    url = "%s/?t=%s" % (API,token)
+
+    print(url)
+    if displayInLine:
+        from IPython.display import IFrame    
+        display(IFrame(url, width, height))
+    else: 
+        webbrowser.open(url)
+    return url
 
 # internal function for response parsing and error handling
-def parseResponse(r,printResult = False):
+def parseResponse(r,printResult = True, parseJSON = True):
     if r.status_code == 200:
         if printResult:
             print('response: ',r.text)
-        return json.loads(r.text)
+        if parseJSON:
+            return json.loads(r.text)
+        else: 
+            return
     else:
         raise RuntimeError(r.text)
 
+def send(url,payload,printPayload = True,printResult = True):
+
+    payload = {k: v for k, v in payload.items() if v!= ''} # clean None inputs
+    if printPayload:
+        print('request: ',json.dumps(payload))
+    r = requests.post(url,json=payload)
+    return parseResponse(r,printResult)
 
 # File management functions
-def download(name,location,token):
+def download(src = '',dest = '',token = ''):
     """
     Download files from the genysis servers.
-    Name: location on the genysis servers.
-    location: local file name/path
+    src: location on the genysis servers.
+    dest: local file name/path
     """
-    url= "%s/storage/download?name=%s&t=%s" % (API,name,token)
+    url= "%s/storage/download?name=%s&t=%s" % (API,src,token)
     r = requests.get(url, allow_redirects=True)
-    parseResponse(r)
-    open(location, 'wb').write(r.content)
-    print('successfully downloaded to %s' % location)
+    parseResponse(r,printResult = False,parseJSON = False) # just to check response status
+    open(dest, 'wb').write(r.content)
+    print('successfully downloaded to %s/%s' % (os.getcwd(),dest))
     return
 
-def upload(name,token):
+def upload(src = '',token = ''):
     """
     Upload files from the genysis servers.
-    Name: local file name/path
+    src: local file name/path
     """
-    url="https://studiobitonti.appspot.com/storage/upload"
-    files = {'upload_file': open(name,'rb')}
+    url= "%s/storage/upload" % API
+    files = {'upload_file': open(src,'rb')}
     values = {'t': token}
     r = requests.post(url, files=files, data=values)
-    return parseResponse(r,printResult=True)
+    parseResponse(r,printResult = False,parseJSON = False) # just to check response status
+    print('successfully uploaded to %s' % (src))
+    return 
 
 def listFiles(token):
     url="%s/storage/list?t=%s" % (API,token)
     r = requests.get(url, allow_redirects=True)
-    return parseResponse(r,printResult=True)
+    return parseResponse(r,printResult=False)
 
-def visualize(name,token):
+def visualize(name,token,displayInLine=False,width=800, height=600):
     """
     open a default browser window to visualize a geometry file given its name and user token
     """
-    webbrowser.open('%s/apps/visualize?name=%s&t=%s'%(API,name,token))
+    url = '%s/apps/visualize?name=%s&t=%s'%(API,name,token)
+    print(url)
+    if displayInLine:
+        from IPython.display import IFrame    
+        display(IFrame(url, width, height))
+    else: 
+        webbrowser.open(url)
+    return url
 
-def latticeUnitDesign(name='',token=''):
+def latticeUnitDesign(name='',token='',displayInLine=False,width=800, height=600):
     """
     open a default browser window to for the lattice unit design app
     """
-    webbrowser.open('%s/apps/visualize/latticeUnit.html?name=%s&t=%s'%(API,name,token))
+    url = '%s/apps/visualize/latticeUnit.html?name=%s&t=%s'%(API,name,token)
+    print(url)
+    if displayInLine:
+        from IPython.display import IFrame    
+        display(IFrame(url, width, height))
+    else: 
+        webbrowser.open(url)
+    return url
 
 def cylindricalProjection(target,resolution,height,output,token,center='',range='',startDir='',rotationAxis=''):
     """
@@ -72,10 +112,7 @@ def cylindricalProjection(target,resolution,height,output,token,center='',range=
     """
     url ="%s/cylindricalProjection" % API
     payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotation_axis":rotationAxis,"start_dir":startDir,"height":height,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def sphericalProjection(target,resolution,output,token,center='',range='',startDir='',rotationAxis=''):
     """
@@ -90,10 +127,7 @@ def sphericalProjection(target,resolution,output,token,center='',range='',startD
     """
     url ="%s/sphericalProjection" % API
     payload = {"target":target,"center":center,"resolution":resolution,"range":range,"rotation_axis":rotationAxis,"start_dir":startDir,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def planarProjection(target,center,direction,size,resolution,output,token):
     """
@@ -108,10 +142,7 @@ def planarProjection(target,center,direction,size,resolution,output,token):
     """
     url ="%s/planeProjection" % API
     payload = {"target":target,"center":center,"direction": direction,"size":size,"resolution":resolution,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def boolean(input1,input2,output,operation,token): #operations are Union, Interset and Difference
     """
@@ -124,10 +155,7 @@ def boolean(input1,input2,output,operation,token): #operations are Union, Inters
     """
     url ="%s/boolean" % API
     payload = {"input1":input1,"input2":input2,"operation":operation,"output":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def convexHull(points,token):
     """
@@ -136,10 +164,7 @@ def convexHull(points,token):
     """
     url ="%s/convexHull" % API
     payload = {"points":points,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def voronoi(points,token):
     """
@@ -148,10 +173,7 @@ def voronoi(points,token):
     """
     url ="%s/voronoi" % API
     payload = {"points":points,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def delaunay(points,token):
     """
@@ -160,10 +182,7 @@ def delaunay(points,token):
     """
     url ="%s/delaunay" % API
     payload = {"points":points,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def blend(compA,compB,value,output,token):
     """
@@ -176,10 +195,7 @@ def blend(compA,compB,value,output,token):
     """
     url ="%s/blend" % API
     payload = {"compA":compA,"compB":compB,"value":value,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def meshSplit(target,output,token):
     """
@@ -190,10 +206,7 @@ def meshSplit(target,output,token):
     """
     url ="%s/meshSplit" % API
     payload = {"target":target,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def meshReduce(target,output,portion,token):
     """
@@ -205,10 +218,7 @@ def meshReduce(target,output,portion,token):
     """
     url ="%s/meshreduction" % API
     payload = {"target":target,"portion":portion,"filename":output,"t":token}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def genLatticeUnit(case,chamfer,centerChamfer,bendIn,cBendIn,connectPt,output,token):
     """
@@ -221,10 +231,7 @@ def genLatticeUnit(case,chamfer,centerChamfer,bendIn,cBendIn,connectPt,output,to
     """
     url = "%s/latticeUnit" % API
     payload = {"case":case,"chamfer":chamfer,"centerChamfer":centerChamfer,"bendIn":bendIn,"cBendIn":cBendIn,"connectPt":connectPt,"filename":output,"t":token}
-    print(json.dumps(payload))
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 def marchingCube(lines,resolution,memberThickness,filename,token,preview=''):
     """
@@ -237,10 +244,7 @@ def marchingCube(lines,resolution,memberThickness,filename,token,preview=''):
     """
     url = "%s/marchingCube" % API
     payload = {"lines":lines,"resolution":resolution,"memberThickness":memberThickness,"filename":filename,"t":token,"preview":preview}
-    payload = {k: v for k, v in payload.items() if v} # clean None inputs
-    print(json.dumps(payload))
-    r = requests.post(url,json=payload)
-    return parseResponse(r,printResult=True)
+    return send(url,payload)
 
 class volumeLattice:
     """
@@ -289,25 +293,17 @@ class volumeLattice:
 
     def runStochastic(self,token):
         """
-        The stochastic lattice function creates a randomly seeded lattice structure inside a given volume. The density can be controlled using the pore size.
+        once all the variables are set you will run this function to generate a stochastic lattice.
         """
         payload = {"volume":self.volume,"poreSize":self.poreSize,"filename":self.output,"t":token}
-        payload = {k: v for k, v in payload.items() if v} # clean None inputs
-        print(json.dumps(payload))
-        #make post request
-        r = requests.post(self.urlStochastic,json=payload)
-        return parseResponse(r,printResult=True)
-
+        return send(self.urlStochastic,payload)
+        
     def run(self,token):
         """
-        The volume lattice function generates arrays of a given lattice structure across a volume in a parametric fashion. The input parameters take in a base component of the volume and a module to be arrayed. Other parameters like component size help define the size of the module which is arrayed.
+        once all the variables are set you will run this function to generate the lattice.
         """
         payload = {"component":self.component,"volume":self.volume,"componentSize":self.componentSize,"filename":self.output,"t":token}
-        payload = {k: v for k, v in payload.items() if v} # clean None inputs
-        print(json.dumps(payload))
-        #make post request
-        r = requests.post(self.url,json=payload)
-        return parseResponse(r,printResult=True)
+        return send(self.url,payload)
 
 class surfaceLattice:
     """
@@ -357,6 +353,9 @@ class surfaceLattice:
     def setComponent(self,component):
         self.component=component
 
+    def setAutoScale(self,autoScale):
+        self.autoScale = autoScale
+
     #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
     def addPointAttractor(self,component,point,range):
         self.attractorSet.append({"component":component,"attractor":{"point":point,"range":range}})
@@ -370,7 +369,9 @@ class surfaceLattice:
 #lattice generation functions
 
     def run(self,token):
-
+        '''
+        once all the variables are set you will run this function to generate the lattice.
+        '''
         # put together request body inputs
         payload = {
             "component": self.component,
@@ -379,16 +380,11 @@ class surfaceLattice:
             "cellHeight": self.cellHeight,
             "filename": self.output,
             "blendTargets": self.attractorSet,
+            "autoScale": self.autoScale,
             "t": token
         }
 
-        # clean None inputs
-        payload = {k: v for k, v in payload.items() if v}
-        print(json.dumps(payload))
-
-        # make post request
-        r = requests.post(self.url,json=payload)
-        return parseResponse(r,printResult = True)
+        return send(self.url,payload)
 
 
 class conformalLattice:
@@ -413,6 +409,7 @@ class conformalLattice:
         self.gridOutput='temp_grid.json'
         self.boxes=""
         self.attractorSet=[]
+        self.EPSILON = 0.01
 
 #functions for seting key variables
     def setUVW(self,u,v,w):
@@ -439,6 +436,8 @@ class conformalLattice:
     #(string) Name of lattice file for export.
     def setOutput(self,output):#file name that you want to save out
         self.output=output
+    def setEPSILON(self,EPSILON):
+        self.EPSILON=EPSILON
 
     #add point attractor. For example:(component="cell_2.obj",point=[2.8,8,2.7],range=5)
     def addPointAttractor(self,component,point,range):
@@ -451,6 +450,18 @@ class conformalLattice:
         self.attractorSet.append({"component":component,"attractor":{"curve":curve,"range":range}})
 
 #Generate conformalGrid
+    def designGrid(self,token,displayInLine=False,width=800, height=600):
+    
+        url = '%s/apps/visualize/gridDesign.html?surfaces=%s&t=%s&filename=%s'%(API,self.surfaces,token,self.gridOutput)
+        print(url)
+        if displayInLine:
+            from IPython.display import IFrame    
+            display(IFrame(url, width, height))
+        else: 
+            webbrowser.open(url)
+        return url
+
+
     def genGrid(self,token):
         """
         The conformal grid function generates a grid structure inside a given mesh input. The U,V,W are variables for the number of the grid cells.
@@ -462,12 +473,8 @@ class conformalLattice:
         Filename: Name of the resultant file for the lattice unit.
         """
         payload = {"u":self.u,"v":self.v,"w":self.w,"unitize":self.unitize,"surfaces":self.surfaces,"filename":self.gridOutput,"t":token}
-        payload = {k: v for k, v in payload.items() if v}
-        print(json.dumps(payload))
-        r = requests.post(self.urlGrid,json=payload)
-        r = parseResponse(r,printResult = True)
         self.boxes=self.gridOutput
-        return r
+        return send(self.urlGrid,payload)
 
 #Populate conformal lattice
     def populateLattice(self,token):#Lattice on one surface with a constant offset with attractors for blended lattice
@@ -480,9 +487,5 @@ class conformalLattice:
         """
         #get attractor information
 
-        payload = {"boxes":self.gridOutput,"component":self.component,"filename":self.output,"t":token,"blendTargets":self.attractorSet}
-        payload = {k: v for k, v in payload.items() if v}
-        print(json.dumps(payload))
-        #make post request
-        r = requests.post(self.urlPopulate,json=payload)
-        return parseResponse(r,printResult = True)
+        payload = {"boxes":self.gridOutput,"component":self.component,"filename":self.output,"t":token,"blendTargets":self.attractorSet,"EPSILON":self.EPSILON}
+        return send(self.urlPopulate,payload)
