@@ -6,3 +6,4 @@ genysis.egg-info
 .DS_Store
 .DS_Store?
 src/*
+*.blend1
