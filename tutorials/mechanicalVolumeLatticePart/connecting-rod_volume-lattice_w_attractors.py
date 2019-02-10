@@ -30,7 +30,7 @@ genysis.boolean(
     operation="intersection",
     token=token)
 
-# create a low density lattice unit to replace the solid center of the connecting rod
+# create a low density lattice unit for the middle of the cutout
 low_density_unit_filename = "low_density_lattice_unit.obj"
 
 genysis.genLatticeUnit(
@@ -41,6 +41,19 @@ genysis.genLatticeUnit(
     cBendIn=0.0,
     connectPt=0.0,
     output=low_density_unit_filename,
+    token=token)
+
+# create a high density lattice unit for the edges of the cutout
+high_density_unit_filename = "high_density_lattice_unit.obj"
+
+genysis.genLatticeUnit(
+    case=3,
+    chamfer=0.0,
+    centerChamfer=0.0,
+    bendIn=0.5,
+    cBendIn=0.0,
+    connectPt=0.0,
+    output=high_density_unit_filename,
     token=token)
 
 # create a volume lattice object
@@ -54,6 +67,23 @@ cutoutLattice.setComponent(low_density_unit_filename)
 
 # set the size of one lattice unit
 cutoutLattice.setComponentSize(4.0)
+
+# define some planes to use as attractors [normX, normY, normZ, distanceFromOrigin]
+top_plane_attractor =    [0,  0,  1, 82.099785]
+bottom_plane_attractor = [0,  0, -1, 162.403183]
+left_plane_attractor =   [0, -1,  0, 10.864898]
+right_plane_attractor =  [0,  1,  0, -11.994245]
+
+# add our attractors to cause the lattice to be more solid at the edges of the volume
+#top
+# cutoutLattice.addPointAttractor(component=high_density_unit_filename, point=[0,0,-120], range=10.0)
+# cutoutLattice.addPlaneAttractor(component=high_density_unit_filename, plane=top_plane_attractor, range=0.1)
+#bottom
+# cutoutLattice.addPlaneAttractor(component=high_density_unit_filename, plane=bottom_plane_attractor, range=0.1)
+# #left
+# cutoutLattice.addPlaneAttractor(component=high_density_unit_filename, plane=left_plane_attractor, range=0.1)
+# #right
+# cutoutLattice.addPlaneAttractor(component=high_density_unit_filename, plane=right_plane_attractor, range=1.0)
 
 # tell genysis where to save the lattice object
 completed_lattice_filename = "connecting-rod_lattice-1-applied.obj"
@@ -152,14 +182,7 @@ with open(meshed_lattice_filename_obj, 'w') as f:
         f.write("\n")
 
 # upload the now combined meshed lattice obj to the genysis server
-import requests
-# get the upload path for large files
-upload_url = requests.get('http://studiobitonti.appspot.com/compute/getNode?t=' + token).text
-upload_url += '/storage/upload?t=' + token
-
-files = {'file': (meshed_lattice_filename_obj, open(meshed_lattice_filename_obj, 'rb'))}
-
-r = requests.post(upload_url, files=files)
+genysis.upload(src=meshed_lattice_filename_obj, token=token)
 
 # combine the lattice with the connecting rod with a hole cut out
 # to get our final part
