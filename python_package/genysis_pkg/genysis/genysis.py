@@ -3,6 +3,7 @@ import json
 import webbrowser
 import os 
 from .meshRepair import *
+from .meshRepair_v2 import *
 
 API = "https://studiobitonti.appspot.com"
 # API = "http://localhost:3000"
@@ -144,7 +145,7 @@ def planarProjection(target,center,direction,size,resolution,output,token):
     payload = {"target":target,"center":center,"direction": direction,"size":size,"resolution":resolution,"filename":output,"t":token}
     return send(url,payload)
 
-def boolean(input1,input2,output,operation,token): #operations are Union, Interset and Difference
+def boolean(input1,input2,output,operation,token,engine='carve'): #operations are Union, Interset and Difference
     """
     This is the Doc stings located at the top of the file.
 
@@ -318,7 +319,7 @@ class surfaceLattice:
         # self.url = "http://localhost:3000/surfaceLattice"
         #Always True
         self.autoScale=True
-        self.ESIPLON=0.01
+        self.EPSILON=0.01
         self.bin=False
         #variables that need to be set by the user.
         self.output = None
@@ -335,8 +336,8 @@ class surfaceLattice:
     def setBin(self,bin):
         self.bin=bin
     #(float) Epsilon is used to determin tolerances that define when two lattice cells are considered touching.
-    def setEspilon(self,espilon):
-        self.ESIPLON=espilon
+    def setEPSILON(self,EPSILON):
+        self.EPSILON=EPSILON
     #(string) this is the name of the file that the function will output after it is computed.
     def setOutput(self,output):#file name that you want to save out
         self.output=output
@@ -381,6 +382,7 @@ class surfaceLattice:
             "filename": self.output,
             "blendTargets": self.attractorSet,
             "autoScale": self.autoScale,
+            "EPSILON": self.EPSILON,
             "t": token
         }
 
