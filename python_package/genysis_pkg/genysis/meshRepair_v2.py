@@ -16,11 +16,8 @@ class meshRepair_v2:
         self.output = ''
 
     def setInput(self,_input):
-        if _input.lower().find('.stl') >= 0:
-            self.input = _input
-        else:
-            raise RuntimeError('has too be stl format')
-    
+        self.input = _input
+
     def setOutput(self,output):
         self.output = output
     
