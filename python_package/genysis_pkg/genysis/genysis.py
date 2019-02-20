@@ -1,9 +1,10 @@
 import requests
 import json
 import webbrowser
-import os 
+import os,sys 
 from .meshRepair import *
 from .meshRepair_v2 import *
+from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
 API = "https://studiobitonti.appspot.com"
 # API = "http://localhost:3000"
@@ -28,7 +29,7 @@ def parseResponse(r,printResult = True, parseJSON = True):
         if parseJSON:
             return json.loads(r.text)
         else: 
-            return
+            return r.text
     else:
         raise RuntimeError(r.text)
 
@@ -48,24 +49,75 @@ def download(src = '',dest = '',token = ''):
     dest: local file name/path
     """
     url= "%s/storage/download?name=%s&t=%s" % (API,src,token)
-    r = requests.get(url, allow_redirects=True)
-    parseResponse(r,printResult = False,parseJSON = False) # just to check response status
-    open(dest, 'wb').write(r.content)
-    print('successfully downloaded to %s/%s' % (os.getcwd(),dest))
-    return
+    # r = requests.get(url, allow_redirects=True)
+    # parseResponse(r,printResult = False,parseJSON = False) # just to check response status
+    # open(dest, 'wb').write(r.content)
+    # print('successfully downloaded to %s/%s' % (os.getcwd(),dest))
+    # return
 
-def upload(src = '',token = ''):
+    with open(dest, "wb") as f:
+        print("Downloading %s as %s" % (src,dest))
+        response = requests.get(url, stream=True)
+        total_length = response.headers.get('content-length')
+
+        if total_length is None: # no content length header
+            f.write(response.content)
+        else:
+            dl = 0
+            total_length = int(total_length)
+            for data in response.iter_content(chunk_size=4096):
+                dl += len(data)
+                f.write(data)
+                done = int(50 * dl / total_length)
+                percentage = str(int(100 * dl / total_length))+'%'
+                sys.stdout.write("\r[%s%s]%s" % ('=' * done, ' ' * (50-done),percentage) )    
+                sys.stdout.flush()
+
+    print('\nsuccessfully downloaded to %s' % (dest))
+
+def upload(src ,dest = '',token = ''):
     """
     Upload files from the genysis servers.
     src: local file name/path
     """
     url= "%s/storage/upload" % API
-    files = {'upload_file': open(src,'rb')}
-    values = {'t': token}
-    r = requests.post(url, files=files, data=values)
-    parseResponse(r,printResult = False,parseJSON = False) # just to check response status
-    print('successfully uploaded to %s' % (src))
-    return 
+
+    if dest == '':
+        dest = src
+
+    file_size = os.path.getsize(src)
+    print ('uploading file size:',file_size/(1000*1000),'MB')
+
+    if (file_size >= 32 * 1000 * 1000):
+        print('file is larger than 32MB, using compute node for uploading')
+        r = requests.get( "%s/compute/getNode?t=%s" % (API,token), allow_redirects=True)
+        computeNode = parseResponse(r,False,False)
+        url= "%s/storage/upload" % computeNode
+        print('compute node found')
+
+    # files = {'upload_file': open(src,'rb')}
+    # values = {'t': token}
+    # r = requests.post(url, files=files, data=values)
+    # parseResponse(r,printResult = False,parseJSON = False) # just to check response status
+    
+    def my_callback(monitor):
+    # Your callback function
+        progress = monitor.bytes_read
+        done = int(50 * progress / file_size)
+        percentage = str(int(100 * progress / file_size)) + '%'
+        sys.stdout.write("\r[%s%s]%s" % ('=' * done, ' ' * (50-done), percentage ))    
+        sys.stdout.flush()
+
+    e = MultipartEncoder(
+        fields={'t': token,
+                'dest': dest,
+                'file': (src, open(src, 'rb'), 'text/plain')}
+        )
+    m = MultipartEncoderMonitor(e, my_callback)
+    r = requests.post(url, data=m, headers={'Content-Type': m.content_type})
+    
+    print('\nsuccessfully uploaded %s as %s' % (src,dest))
+    return parseResponse(r,printResult=False)
 
 def listFiles(token):
     url="%s/storage/list?t=%s" % (API,token)

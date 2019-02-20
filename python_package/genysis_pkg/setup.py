@@ -5,7 +5,7 @@
 
 from setuptools import setup
 setup(name='genysis',
-      version='0.3.0',
+      version='0.3.1',
       description='generative design lattive design',
       url='https://github.com/francisbitontistudio/genysis_pythonPKG.git',
       author='F. Bitonti',
@@ -13,5 +13,6 @@ setup(name='genysis',
       license='MIT',
       packages=['genysis'],
       install_requires=['requests>=2.18.4',
-                        'json262>=0.2.0']
+                        'json262>=0.2.0',
+                        'requests-toolbelt>=0.8.0']
       )

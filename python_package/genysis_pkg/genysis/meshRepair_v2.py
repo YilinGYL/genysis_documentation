@@ -57,6 +57,10 @@ class meshRepair_v2:
         payload = {"input":self.input,"output":self.output,"t":self.t}
         return send(self.url+'/delete_degenerated_faces',payload)
 
+    def union_shells(self):
+        payload = {"input":self.input,"output":self.output,"t":self.t}
+        return send(self.url+'/union_shells',payload)
+
 
 def parseResponse(r,printResult = True, parseJSON = True):
     if r.status_code == 200:
